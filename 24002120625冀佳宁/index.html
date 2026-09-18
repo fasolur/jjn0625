@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冀佳宁的《高级网页设计》课堂实践</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* ===== 背景浮动粒子 ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
+        .particle:nth-child(1) { width: 80px; height: 80px; left: 8%;  animation-duration: 15s; animation-delay: 0s; }
+        .particle:nth-child(2) { width: 60px; height: 60px; left: 22%; animation-duration: 12s; animation-delay: 2s; }
+        .particle:nth-child(3) { width: 100px; height: 100px; left: 42%; animation-duration: 18s; animation-delay: 1s; }
+        .particle:nth-child(4) { width: 50px; height: 50px; left: 62%; animation-duration: 14s; animation-delay: 3s; }
+        .particle:nth-child(5) { width: 70px; height: 70px; left: 78%; animation-duration: 16s; animation-delay: 0.5s; }
+        .particle:nth-child(6) { width: 45px; height: 45px; left: 92%; animation-duration: 20s; animation-delay: 4s; }
+
+        /* ===== 主容器 ===== */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* ===== 头部 ===== */
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        header h1 {
+            font-size: 2.6em;
+            font-weight: 700;
+            background: linear-gradient(90deg, #f093fb, #f5576c, #4facfe, #00f2fe);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 4s ease infinite;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50%      { background-position: 100% 50%; }
+        }
+
+        header .subtitle {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 4px;
+        }
+
+        header .divider {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #f5576c, transparent);
+            margin: 18px auto 0;
+            border-radius: 2px;
+        }
+
+        /* ===== 区域标题 ===== */
+        .section-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-bottom: 25px;
+            padding-left: 15px;
+            border-left: 4px solid #f5576c;
+        }
+
+        /* ===== 卡片网格 ===== */
+        .course-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        /* ===== 卡片 ===== */
+        .card {
+            position: relative;
+            flex: 1 1 240px;
+            min-width: 240px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 28px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.2s; }
+        .card:nth-child(2) { animation-delay: 0.4s; }
+        .card:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+            transition: left 0.6s;
+        }
+
+        .card:hover::before { left: 100%; }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(245, 87, 108, 0.5);
+            box-shadow: 0 20px 60px rgba(245, 87, 108, 0.2);
+        }
+
+        .card-num {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.05);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            line-height: 1;
+        }
+
+        .card-icon {
+            font-size: 2em;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .card p {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1.6;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .badge.active {
+            background: rgba(79, 172, 254, 0.2);
+            color: #4facfe;
+            border: 1px solid rgba(79, 172, 254, 0.3);
+        }
+
+        .badge.pending {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 待开发卡片 */
+        .card.coming-soon {
+            opacity: 0.5;
+            cursor: default;
+            border-style: dashed;
+        }
+
+        .card.coming-soon:hover {
+            transform: none;
+            box-shadow: none;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* ===== 提示词区域 ===== */
+        .prompt-section {
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+            margin-bottom: 50px;
+        }
+
+        .prompt-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 25px;
+            font-family: "Courier New", Consolas, monospace;
+            font-size: 0.88em;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.45);
+            position: relative;
+        }
+
+        .prompt-box::before {
+            content: 'PROMPT';
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.12);
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        /* ===== 底部 ===== */
+        footer {
+            text-align: center;
+            padding: 30px 0 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeInUp 0.8s ease-out 1s both;
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.85em;
+        }
+
+        footer .heart {
+            color: #f5576c;
+            display: inline-block;
+            animation: heartbeat 1.5s ease infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50%      { transform: scale(1.2); }
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2em; }
+            .container { padding: 40px 15px; }
+            .card { flex: 1 1 100%; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 背景粒子 -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="container">
+        <!-- 头部 -->
+        <header>
+            <h1>冀佳宁的《高级网页设计》课堂实践</h1>
+            <p class="subtitle">Advanced Web Design · Class Practice</p>
+            <div class="divider"></div>
+        </header>
+
+        <!-- 课程目录 -->
+        <h2 class="section-title">课堂目录</h2>
+        <div class="course-grid">
+
+            <!-- 01 Flex复习 -->
+            <a href="代码.html" class="card">
+                <span class="card-num">01</span>
+                <div class="card-icon">⚡</div>
+                <h3>Flex 布局复习</h3>
+                <p>导航布局 / 三等分布局 / 响应式卡片网格 / 侧边栏布局</p>
+                <span class="badge active">已完成</span>
+            </a>
+
+            <!-- 02 字体图标 -->
+            <a href="svg图标.html" class="card">
+                <span class="card-num">02</span>
+                <div class="card-icon">★</div>
+                <h3>字体图标</h3>
+                <p>SVG图标底部Tab导航 / Iconfont 使用</p>
+                <span class="badge active">已完成</span>
+            </a>
+
+            <!-- 03 待开发 -->
+            <div class="card coming-soon">
+                <span class="card-num">03</span>
+                <div class="card-icon">···</div>
+                <h3>更多精彩模块</h3>
+                <p>内容正在筹备中，敬请期待</p>
+                <span class="badge pending">后续增加</span>
+            </div>
+        </div>
+
+        <!-- 原始提示词 -->
+        <section class="prompt-section">
+            <h2 class="section-title">创建此页面的提示词</h2>
+            <div class="prompt-box">
+创建一个新页面，包括本目录下的所有网页的超链接，使用原生代码，不使用cdn，新页面名称为index.html，主题为冀佳宁的《高级网页设计》课堂实践，美化页面，课堂目录中包含flex复习、字体图标、其余模块后续在增加。页面中包括本提示词。
+            </div>
+        </section>
+
+        <!-- 底部 -->
+        <footer>
+            <p>Made with <span class="heart">♥</span> for 高级网页设计课堂实践</p>
+        </footer>
+    </div>
+</body>
+
+</html>
