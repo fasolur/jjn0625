@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucide · Forms of Sign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --wy-bg: #0A0613;
+            --wy-bg-2: #10081E;
+            --wy-ink: #F4EFE8;
+            --wy-ink-dim: rgba(244, 239, 232, 0.55);
+            --wy-violet: #9D4EDD;
+            --wy-violet-light: #C77DFF;
+            --wy-cyan: #7B8DFF;
+            --wy-rule: rgba(157, 78, 221, 0.14);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--wy-bg);
+            color: var(--wy-ink);
+            min-height: 100vh;
+            font-weight: 400;
+            letter-spacing: -0.005em;
+        }
+
+        /* 顶部彩条 */
+        .wy_topbar {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--wy-violet), var(--wy-cyan));
+            z-index: 50;
+        }
+
+        /* 导航 */
+        .wy_nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 56px;
+            border-bottom: 1px solid var(--wy-rule);
+            position: relative;
+            z-index: 10;
+        }
+        .wy_nav_home {
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: -0.005em;
+            color: var(--wy-violet-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .wy_nav_home:hover { color: var(--wy-ink); }
+        .wy_nav_list {
+            display: flex;
+            gap: 28px;
+            list-style: none;
+        }
+        .wy_nav_list a {
+            font-size: 0.78rem;
+            letter-spacing: 0.14em;
+            font-weight: 500;
+            color: var(--wy-ink-dim);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+        .wy_nav_list a:hover { color: var(--wy-violet-light); }
+
+        /* Hero */
+        .wy_hero {
+            padding: 140px 56px 120px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .wy_hero_num {
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--wy-violet-light);
+            margin-bottom: 32px;
+        }
+        .wy_hero_title {
+            font-weight: 700;
+            font-size: clamp(3rem, 10vw, 8.5rem);
+            line-height: 0.92;
+            letter-spacing: -0.035em;
+            margin-bottom: 40px;
+        }
+        .wy_hero_title span {
+            color: var(--wy-violet-light);
+        }
+        .wy_hero_sub {
+            max-width: 480px;
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: var(--wy-ink-dim);
+            margin-left: auto;
+        }
+
+        /* 大分隔 */
+        .wy_bigrule {
+            height: 1px;
+            background: var(--wy-rule);
+            margin: 0 56px;
+            max-width: 1288px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 章节 */
+        .wy_section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 96px 56px;
+        }
+        .wy_section_head {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            align-items: end;
+            margin-bottom: 64px;
+        }
+        .wy_section_title {
+            font-weight: 700;
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            letter-spacing: -0.03em;
+            line-height: 1;
+        }
+        .wy_section_meta {
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--wy-violet);
+        }
+
+        /* Hero Icon — 大的展示 */
+        .wy_featured {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            border-top: 1px solid var(--wy-rule);
+            border-bottom: 1px solid var(--wy-rule);
+            margin-bottom: 120px;
+        }
+        .wy_feature {
+            padding: 64px 40px;
+            border-right: 1px solid var(--wy-rule);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            transition: background 0.4s ease;
+        }
+        .wy_feature:last-child { border-right: none; }
+        .wy_feature:hover { background: var(--wy-bg-2); }
+        .wy_feature svg {
+            width: 64px;
+            height: 64px;
+            stroke-width: 1.5;
+            color: var(--wy-violet-light);
+        }
+        .wy_feature_name {
+            font-weight: 600;
+            font-size: 1.3rem;
+            letter-spacing: -0.01em;
+        }
+        .wy_feature_desc {
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: var(--wy-ink-dim);
+            line-height: 1.7;
+        }
+
+        /* 图标网格 — 极简 */
+        .wy_grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0;
+            border-top: 1px solid var(--wy-rule);
+            border-left: 1px solid var(--wy-rule);
+        }
+        .wy_cell {
+            aspect-ratio: 1 / 1;
+            padding: 28px;
+            border-right: 1px solid var(--wy-rule);
+            border-bottom: 1px solid var(--wy-rule);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .wy_cell:hover { background: var(--wy-bg-2); }
+        .wy_cell:hover .wy_lucide {
+            color: var(--wy-violet-light);
+            transform: scale(1.08);
+        }
+        .wy_cell svg.wy_lucide {
+            width: 34px;
+            height: 34px;
+            stroke-width: 1.5;
+            color: var(--wy-ink);
+            transition: color 0.3s ease, transform 0.4s ease;
+        }
+        .wy_cell_label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            color: var(--wy-ink-dim);
+            text-transform: none;
+            font-feature-settings: "ss01";
+        }
+
+        /* 页脚 */
+        .wy_footer {
+            border-top: 1px solid var(--wy-rule);
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 56px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: end;
+        }
+        .wy_footer_lg {
+            font-weight: 700;
+            font-size: 1.6rem;
+            letter-spacing: -0.02em;
+            color: var(--wy-violet-light);
+        }
+        .wy_footer_note {
+            font-size: 0.75rem;
+            font-weight: 400;
+            color: var(--wy-ink-dim);
+            line-height: 1.9;
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .wy_nav { padding: 20px 24px; }
+            .wy_nav_list { display: none; }
+            .wy_hero { padding: 80px 24px 60px; }
+            .wy_section { padding: 64px 24px; }
+            .wy_section_head { grid-template-columns: 1fr; }
+            .wy_bigrule { margin: 0 24px; }
+            .wy_featured { grid-template-columns: 1fr; }
+            .wy_feature { border-right: none; border-bottom: 1px solid var(--wy-rule); }
+            .wy_feature:last-child { border-bottom: none; }
+            .wy_footer { grid-template-columns: 1fr; padding: 32px 24px; }
+            .wy_footer_note { text-align: left; }
+        }
+    </style>
+</head>
+<body>
+    <div class="wy_topbar"></div>
+
+    <nav class="wy_nav">
+        <a href="./index.html" class="wy_nav_home">← 返回目录</a>
+        <ul class="wy_nav_list">
+            <li><a href="./iconfont-1.html">Font Awesome</a></li>
+            <li><a href="./iconfont-2.html">Lucide</a></li>
+        </ul>
+    </nav>
+
+    <header class="wy_hero">
+        <div class="wy_hero_num">No. 02 · Forms of Sign</div>
+        <h1 class="wy_hero_title">Lucide<br><span>Minimalist</span> Markers</h1>
+        <p class="wy_hero_sub">
+            An open-source icon library hand-crafted on a 24×24 grid. Consistent stroke weight, generous whitespace, and a single unified design language — every glyph knows exactly what it is.
+        </p>
+    </header>
+
+    <div class="wy_bigrule"></div>
+
+    <section class="wy_section">
+        <div class="wy_featured">
+            <div class="wy_feature"><i data-lucide="sparkles"></i><div class="wy_feature_name">Open &amp; Contributed</div><p class="wy_feature_desc">Maintained by a small community of designers and developers since 2022, under the ISC license.</p></div>
+            <div class="wy_feature"><i data-lucide="grid-3x3"></i><div class="wy_feature_name">24×24 Grid System</div><p class="wy_feature_desc">Every icon is drawn on the same invisible canvas, so they sit together in quiet alignment.</p></div>
+            <div class="wy_feature"><i data-lucide="palette"></i><div class="wy_feature_name">Pure SVG</div><p class="wy_feature_desc">No web fonts, no ligatures, no fallback stacks — just crisp, editable, infinitely scalable vectors.</p></div>
+        </div>
+
+        <div class="wy_section_head">
+            <h2 class="wy_section_title">The Collection</h2>
+            <span class="wy_section_meta">— svg · curated</span>
+        </div>
+        <div class="wy_grid">
+            <div class="wy_cell"><i data-lucide="home" class="wy_lucide"></i><span class="wy_cell_label">home</span></div>
+            <div class="wy_cell"><i data-lucide="search" class="wy_lucide"></i><span class="wy_cell_label">search</span></div>
+            <div class="wy_cell"><i data-lucide="heart" class="wy_lucide"></i><span class="wy_cell_label">heart</span></div>
+            <div class="wy_cell"><i data-lucide="star" class="wy_lucide"></i><span class="wy_cell_label">star</span></div>
+            <div class="wy_cell"><i data-lucide="bookmark" class="wy_lucide"></i><span class="wy_cell_label">bookmark</span></div>
+            <div class="wy_cell"><i data-lucide="user" class="wy_lucide"></i><span class="wy_cell_label">user</span></div>
+            <div class="wy_cell"><i data-lucide="mail" class="wy_lucide"></i><span class="wy_cell_label">mail</span></div>
+            <div class="wy_cell"><i data-lucide="phone" class="wy_lucide"></i><span class="wy_cell_label">phone</span></div>
+            <div class="wy_cell"><i data-lucide="calendar" class="wy_lucide"></i><span class="wy_cell_label">calendar</span></div>
+            <div class="wy_cell"><i data-lucide="map-pin" class="wy_lucide"></i><span class="wy_cell_label">map-pin</span></div>
+            <div class="wy_cell"><i data-lucide="camera" class="wy_lucide"></i><span class="wy_cell_label">camera</span></div>
+            <div class="wy_cell"><i data-lucide="music" class="wy_lucide"></i><span class="wy_cell_label">music</span></div>
+            <div class="wy_cell"><i data-lucide="cloud" class="wy_lucide"></i><span class="wy_cell_label">cloud</span></div>
+            <div class="wy_cell"><i data-lucide="rocket" class="wy_lucide"></i><span class="wy_cell_label">rocket</span></div>
+            <div class="wy_cell"><i data-lucide="briefcase" class="wy_lucide"></i><span class="wy_cell_label">briefcase</span></div>
+            <div class="wy_cell"><i data-lucide="gift" class="wy_lucide"></i><span class="wy_cell_label">gift</span></div>
+            <div class="wy_cell"><i data-lucide="flag" class="wy_lucide"></i><span class="wy_cell_label">flag</span></div>
+            <div class="wy_cell"><i data-lucide="moon" class="wy_lucide"></i><span class="wy_cell_label">moon</span></div>
+            <div class="wy_cell"><i data-lucide="sun" class="wy_lucide"></i><span class="wy_cell_label">sun</span></div>
+            <div class="wy_cell"><i data-lucide="settings" class="wy_lucide"></i><span class="wy_cell_label">settings</span></div>
+            <div class="wy_cell"><i data-lucide="bell" class="wy_lucide"></i><span class="wy_cell_label">bell</span></div>
+            <div class="wy_cell"><i data-lucide="check" class="wy_lucide"></i><span class="wy_cell_label">check</span></div>
+            <div class="wy_cell"><i data-lucide="x" class="wy_lucide"></i><span class="wy_cell_label">x</span></div>
+            <div class="wy_cell"><i data-lucide="plus" class="wy_lucide"></i><span class="wy_cell_label">plus</span></div>
+            <div class="wy_cell"><i data-lucide="minus" class="wy_lucide"></i><span class="wy_cell_label">minus</span></div>
+            <div class="wy_cell"><i data-lucide="arrow-right" class="wy_lucide"></i><span class="wy_cell_label">arrow-right</span></div>
+            <div class="wy_cell"><i data-lucide="external-link" class="wy_lucide"></i><span class="wy_cell_label">external-link</span></div>
+            <div class="wy_cell"><i data-lucide="download" class="wy_lucide"></i><span class="wy_cell_label">download</span></div>
+            <div class="wy_cell"><i data-lucide="upload" class="wy_lucide"></i><span class="wy_cell_label">upload</span></div>
+            <div class="wy_cell"><i data-lucide="share" class="wy_lucide"></i><span class="wy_cell_label">share</span></div>
+            <div class="wy_cell"><i data-lucide="lock" class="wy_lucide"></i><span class="wy_cell_label">lock</span></div>
+            <div class="wy_cell"><i data-lucide="unlock" class="wy_lucide"></i><span class="wy_cell_label">unlock</span></div>
+            <div class="wy_cell"><i data-lucide="eye" class="wy_lucide"></i><span class="wy_cell_label">eye</span></div>
+            <div class="wy_cell"><i data-lucide="eye-off" class="wy_lucide"></i><span class="wy_cell_label">eye-off</span></div>
+            <div class="wy_cell"><i data-lucide="filter" class="wy_lucide"></i><span class="wy_cell_label">filter</span></div>
+            <div class="wy_cell"><i data-lucide="menu" class="wy_lucide"></i><span class="wy_cell_label">menu</span></div>
+            <div class="wy_cell"><i data-lucide="coffee" class="wy_lucide"></i><span class="wy_cell_label">coffee</span></div>
+            <div class="wy_cell"><i data-lucide="umbrella" class="wy_lucide"></i><span class="wy_cell_label">umbrella</span></div>
+            <div class="wy_cell"><i data-lucide="map" class="wy_lucide"></i><span class="wy_cell_label">map</span></div>
+            <div class="wy_cell"><i data-lucide="compass" class="wy_lucide"></i><span class="wy_cell_label">compass</span></div>
+        </div>
+    </section>
+
+    <footer class="wy_footer">
+        <div class="wy_footer_lg">Lucide · SVG</div>
+        <p class="wy_footer_note">
+            Hosted locally · Lucide 0.451.0<br>
+            Pure SVG icons · ISC License
+        </p>
+    </footer>
+
+    <script src="./cdn/lucide/lucide.min.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

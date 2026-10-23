@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>大众点评网页元素2-24002120625冀佳宁</title>
+<!-- iconfont Symbol在线js -->
+<script src="//at.alicdn.com/t/c/font_5242167_148mfp1ju35r.js"></script>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Microsoft Yahei", sans-serif;
+    }
+    /* iconfont svg通用样式 */
+    .icon {
+        width: 1em;
+        height: 1em;
+        vertical-align: -0.15em;
+        fill: currentColor;
+        overflow: hidden;
+    }
+    body {
+        background-color: #f5f5f5;
+        padding:12px;
+    }
+    /* 外层白色卡片 */
+    .jjn-nav-wrap {
+        width: 100%;
+        max-width: 600px;
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 14px;
+        margin: 0 auto;
+    }
+    /* 搜索框 */
+    .jjn-search-box {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ff6700;
+        border-radius: 99px;
+        padding: 7px 10px;
+        margin-bottom: 16px;
+        background: #fff;
+    }
+    .jjn-search-icon {
+        font-size: 16px;
+        color: #999;
+        margin-right: 6px;
+    }
+    .jjn-search-input {
+        flex: 1;
+        font-size:14px;
+        border: none;
+        outline: none;
+        background: transparent;
+    }
+    .jjn-search-btn {
+        background: #ff6700;
+        color: #fff;
+        font-size:13px;
+        border: none;
+        border-radius: 99px;
+        padding:4px 10px;
+        cursor: pointer;
+    }
+    /* 图标导航区域 */
+    .jjn-icon-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap:12px 2px;
+    }
+    .jjn-icon-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .jjn-icon-circle {
+        width: 42px;
+        height: 42px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        margin-bottom:3px;
+        color:#ff6700;
+    }
+    .jjn-icon-text {
+        font-size:11px;
+        color: #222;
+    }
+</style>
+</head>
+<body>
+<div class="jjn-nav-wrap">
+    <!-- 搜索框 -->
+    <div class="jjn-search-box">
+        <span class="jjn-search-icon">🔍</span>
+        <input class="jjn-search-input" placeholder="大连美食必吃榜前十" />
+        <button class="jjn-search-btn">搜索</button>
+    </div>
+    <!-- 图标导航 -->
+    <div class="jjn-icon-grid">
+        <!-- 美食 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-meishi"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">美食</div>
+        </div>
+        <!-- 休闲玩乐 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-xiuxianyule"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">休闲玩乐</div>
+        </div>
+        <!-- 景点游玩 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-building"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">景点游玩</div>
+        </div>
+        <!-- 品质外卖 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-waimai"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">品质外卖</div>
+        </div>
+        <!-- 打车 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-dache"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">打车</div>
+        </div>
+        <!-- 酒店民宿 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-a-jiudianminsu-jian"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">酒店民宿</div>
+        </div>
+        <!-- 丽人美发 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-weibiaoti-2-14"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">丽人美发</div>
+        </div>
+        <!-- 电影演出 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-dianying"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">电影演出</div>
+        </div>
+        <!-- 按摩足疗 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-anmo"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">按摩足疗</div>
+        </div>
+        <!-- 全部服务 -->
+        <div class="jjn-icon-item">
+            <div class="jjn-icon-circle">
+                <svg class="icon" aria-hidden="true">
+                    <use xlink:href="#icon-quanbufuwu-active"></use>
+                </svg>
+            </div>
+            <div class="jjn-icon-text">全部服务</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

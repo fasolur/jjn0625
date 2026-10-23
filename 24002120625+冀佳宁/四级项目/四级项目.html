@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大众点评网页元素1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 12px;
+        }
+
+        .jjn-shop-card {
+            width: 100%;
+            max-width: 640px;
+            background: #fff;
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            gap: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .shop-img {
+            width: 96px;
+            height: 96px;
+            border-radius: 7px;
+            object-fit: cover;
+            flex-shrink: 0;
+            display: block;
+        }
+
+        .shop-info {
+            flex: 1;
+            min-width: 0;
+            position: relative;
+        }
+
+        .distance-time {
+            position: absolute;
+            right: 0;
+            top: 0;
+            text-align: right;
+            line-height: 1.3;
+        }
+
+        .time-text {
+            color: #ff8028;
+            font-size: 14px;
+        }
+
+        .km-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .shop-name {
+            font-size: 17px;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 5px;
+            padding-right: 72px;
+        }
+
+        .star-line {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+        }
+
+        .star {
+            color: #ff7722;
+            font-size: 13px;
+        }
+
+        .score {
+            font-size: 16px;
+            color: #ff7722;
+            font-weight: bold;
+        }
+
+        .meta-text {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .type-row {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 7px;
+        }
+
+        .tag-group {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag-rank {
+            background: #ffe9d9;
+            color: #ff6622;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .tag-record {
+            background: #fff0e8;
+            color: #ff7744;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .desc {
+            font-size: 14px;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .sale-line {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            flex-wrap: wrap;
+        }
+
+        .sale-hint {
+            color: #ff5522;
+            font-weight: bold;
+            background: #fff0e8;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+
+        .sale-price {
+            color: #ff5522;
+            font-weight: bold;
+            font-size: 17px;
+        }
+
+        .sale-discount {
+            border: 1px solid #ff5522;
+            color: #ff5522;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="jjn-shop-card">
+    <img class="shop-img" src="food.jpg" alt="横山居膳斋">
+
+    <div class="shop-info">
+        <div class="distance-time">
+            <div class="time-text">11:00营业</div>
+            <div class="km-text">3.6km</div>
+        </div>
+
+        <div class="shop-name">横山居膳斋素食自助餐厅</div>
+
+        <div class="star-line">
+            <span class="star">★★★★☆</span>
+            <span class="score">4.3</span>
+            <span class="meta-text">1832条 ¥76/人</span>
+        </div>
+
+        <div class="type-row">自助餐 旅顺</div>
+
+        <div class="tag-group">
+            <span class="tag-rank">榜 旅顺口区自助餐热门榜第1名</span>
+            <span class="tag-record">收录11年</span>
+        </div>
+
+        <div class="desc">“菜品齐全，面食 蔬菜 水果 丰富”</div>
+
+        <div class="sale-line">
+            <span class="sale-hint">惠</span>
+            <span class="sale-price">¥39</span>
+            <span class="sale-discount">5折</span>
+            <span>单人 儿童午餐自助餐（1.1-1.4）</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

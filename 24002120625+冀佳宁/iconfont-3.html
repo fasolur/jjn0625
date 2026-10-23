@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <title>iconfont-3 · 移动端底部导航（字体图标）</title>
+    <!-- ===== iconfont 字体图标 CSS ===== -->
+    <link rel="stylesheet" href="./font/iconfont.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        :root {
+            --wy-bg: #0A0613;
+            --wy-bg-alt: #140D1F;
+            --wy-surface: #1B1425;
+            --wy-ink: #F4EFE8;
+            --wy-ink-dim: rgba(244, 239, 232, 0.5);
+            --wy-gold: #D4A373;
+            --wy-gold-muted: #7F5539;
+            --wy-badge-red: #FF4D4F;
+            --wy-badge-dot: #FF6B6B;
+            --wy-rule: rgba(212, 163, 115, 0.18);
+            --wy-safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        html, body {
+            background: var(--wy-bg);
+            color: var(--wy-ink);
+            font-family: 'Lora', Georgia, serif;
+            min-height: 100vh;
+            padding-bottom: calc(84px + var(--wy-safe-bottom));
+        }
+
+        /* ===== 内容区：模拟移动端应用主界面 ===== */
+        .wy_page {
+            padding: 60px 20px 40px;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .wy_page_label {
+            font-family: 'Instrument Serif', serif;
+            font-style: italic;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            color: var(--wy-gold);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .wy_page_title {
+            font-family: 'Instrument Serif', serif;
+            font-weight: 400;
+            font-size: 2.8rem;
+            line-height: 1;
+            letter-spacing: -0.01em;
+            margin-bottom: 28px;
+        }
+        .wy_page_title em {
+            font-style: italic;
+            color: var(--wy-gold);
+        }
+
+        .wy_page_desc {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: var(--wy-ink-dim);
+            margin-bottom: 36px;
+        }
+
+        /* 示例卡片 */
+        .wy_demo_grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .wy_demo_card {
+            background: var(--wy-surface);
+            border: 1px solid var(--wy-rule);
+            border-radius: 14px;
+            padding: 20px 22px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .wy_demo_card .iconfont {
+            font-size: 1.6rem;
+            color: var(--wy-gold);
+        }
+        .wy_demo_text {
+            flex: 1;
+        }
+        .wy_demo_text h4 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+        .wy_demo_text p {
+            font-size: 0.78rem;
+            color: var(--wy-ink-dim);
+        }
+        .wy_demo_arrow {
+            color: var(--wy-gold-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ===== 固定底部导航 ===== */
+        .wy_tabbar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+            width: 100%;
+            background: rgba(10, 6, 19, 0.92);
+            backdrop-filter: blur(24px) saturate(1.6);
+            -webkit-backdrop-filter: blur(24px) saturate(1.6);
+            border-top: 1px solid var(--wy-rule);
+            padding-bottom: var(--wy-safe-bottom);
+        }
+
+        .wy_tabbar_inner {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 64px;
+            padding: 0 8px;
+        }
+
+        .wy_tab_item {
+            flex: 1;
+            max-width: 80px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            transition: color 0.25s ease;
+            color: var(--wy-ink-dim);
+        }
+
+        .wy_tab_icon {
+            font-family: "iconfont" !important;
+            font-size: 1.45rem;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1;
+            transition: color 0.25s ease, transform 0.25s ease;
+            position: relative;
+        }
+
+        .wy_tab_label {
+            font-size: 0.68rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            transition: color 0.25s ease;
+        }
+
+        /* 激活态 */
+        .wy_tab_item.active {
+            color: var(--wy-gold);
+        }
+        .wy_tab_item.active .wy_tab_icon {
+            transform: translateY(-2px) scale(1.05);
+        }
+
+        /* ===== 徽章系统 ===== */
+        /* 数字徽章 */
+        .wy_badge_num {
+            position: absolute;
+            top: -2px;
+            right: -6px;
+            min-width: 16px;
+            height: 16px;
+            padding: 0 4px;
+            background: var(--wy-badge-red);
+            border-radius: 8px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            line-height: 16px;
+            text-align: center;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(255, 77, 79, 0.4);
+            z-index: 2;
+            border: 1.5px solid var(--wy-bg);
+        }
+
+        /* 纯红点 */
+        .wy_badge_dot {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 8px;
+            height: 8px;
+            background: var(--wy-badge-dot);
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px var(--wy-bg);
+            z-index: 2;
+            animation: wy_dotPulse 2s ease-in-out infinite;
+        }
+        @keyframes wy_dotPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.7; transform: scale(1.25); }
+        }
+
+        /* ===== 点击波纹反馈 ===== */
+        .wy_tab_item:active .wy_tab_icon {
+            transform: scale(0.9);
+        }
+
+        @media (min-width: 481px) {
+            .wy_tabbar {
+                left: 50%;
+                transform: translateX(-50%);
+                max-width: 480px;
+                border-radius: 20px 20px 0 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== 主内容 ===== -->
+    <main class="wy_page">
+        <span class="wy_page_label">The Archive · Mobile</span>
+        <h1 class="wy_page_title">Bottom<br><em>Navigation</em></h1>
+        <p class="wy_page_desc">
+            使用 iconfont 字体图标构建的移动端固定底部导航。四个 tab，其中"购买"带数字徽章，"我的"带红点提示。
+        </p>
+
+        <div class="wy_demo_grid">
+            <div class="wy_demo_card">
+                <span class="iconfont icon-aichegujiabeifen5"></span>
+                <div class="wy_demo_text">
+                    <h4>首页</h4>
+                    <p>品牌故事 · 最新馆藏</p>
+                </div>
+                <span class="wy_demo_arrow">›</span>
+            </div>
+            <div class="wy_demo_card">
+                <span class="iconfont icon-maichepin"></span>
+                <div class="wy_demo_text">
+                    <h4>购买</h4>
+                    <p>3 件商品待付款</p>
+                </div>
+                <span class="wy_demo_arrow">›</span>
+            </div>
+            <div class="wy_demo_card">
+                <span class="iconfont icon-mendian"></span>
+                <div class="wy_demo_text">
+                    <h4>门店</h4>
+                    <p>12 家门店为您服务</p>
+                </div>
+                <span class="wy_demo_arrow">›</span>
+            </div>
+            <div class="wy_demo_card">
+                <span class="iconfont icon-aichegujiabeifen6"></span>
+                <div class="wy_demo_text">
+                    <h4>我的</h4>
+                    <p>新消息 · 账户安全提醒</p>
+                </div>
+                <span class="wy_demo_arrow">›</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== 固定底部导航栏 ===== -->
+    <nav class="wy_tabbar" id="wy_tabbar">
+        <div class="wy_tabbar_inner">
+
+            <!-- 首页（默认激活） -->
+            <div class="wy_tab_item active" data-target="home" onclick="wy_switchTab(this)">
+                <span class="wy_tab_icon iconfont icon-aichegujiabeifen5"></span>
+                <span class="wy_tab_label">首页</span>
+            </div>
+
+            <!-- 购买（带数字徽章） -->
+            <div class="wy_tab_item" data-target="shop" onclick="wy_switchTab(this)">
+                <span class="wy_tab_icon iconfont icon-maichepin"></span>
+                <span class="wy_tab_label">购买</span>
+                <span class="wy_badge_num">3</span>
+            </div>
+
+            <!-- 门店 -->
+            <div class="wy_tab_item" data-target="store" onclick="wy_switchTab(this)">
+                <span class="wy_tab_icon iconfont icon-mendian"></span>
+                <span class="wy_tab_label">门店</span>
+            </div>
+
+            <!-- 我的（带红点） -->
+            <div class="wy_tab_item" data-target="mine" onclick="wy_switchTab(this)">
+                <span class="wy_tab_icon iconfont icon-aichegujiabeifen6"></span>
+                <span class="wy_tab_label">我的</span>
+                <span class="wy_badge_dot"></span>
+            </div>
+
+        </div>
+    </nav>
+
+    <script>
+        function wy_switchTab(el) {
+            var items = document.querySelectorAll('#wy_tabbar .wy_tab_item');
+            for (var i = 0; i < items.length; i++) {
+                items[i].classList.remove('active');
+            }
+            el.classList.add('active');
+        }
+    </script>
+</body>
+</html>
