@@ -100,3 +100,12 @@ gitee私人令牌 3dc0c06b807f224c48e80a4bbd1a8086;
 ```
 所以重申一下我需要做的内容
 ```
+
+---
+
+**时间**: 2026-10-30
+**模型**: DeepSeek-V4.1-Flash
+**提示词**:
+```
+创建技能skill：提交到github，将本项目提交commit并push到`https://gitee.com/fasolur/jjn0625.git`，使用已设置公钥。
+```

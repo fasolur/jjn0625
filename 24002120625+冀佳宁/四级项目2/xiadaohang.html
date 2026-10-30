@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>大众点评复刻｜24002120625 jjn</title>
+  <link rel="stylesheet" href="//at.alicdn.com/t/c/font_5246693_gp18gw1z0pb.css">
+  <style>
+    /* 全局样式（全局CSS，满足要求） */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      background-color: #f5f5f5;
+      padding-bottom: calc(64px + env(safe-area-inset-bottom));
+    }
+    /* 类名加入缩写jjn */
+    .jjn-tabbar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 64px;
+      padding-bottom: env(safe-area-inset-bottom);
+      background: #ffffff;
+      display: flex;
+      border-top: 1px solid #eeeeee;
+    }
+    .jjn-tab-item {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #999999;
+      text-decoration: none;
+      font-size: 12px;
+    }
+    .jjn-tab-item .iconfont {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+    .jjn-tab-item.active {
+      color: #ff6339;
+    }
+  </style>
+</head>
+<body>
+  <!-- 24002120625 冀佳宁 jjn -->
+  <div class="jjn-tabbar">
+    <a href="#" class="jjn-tab-item active">
+      <i class="iconfont icon-dazhongdianping"></i>
+      <span>首页</span>
+    </a>
+    <a href="#" class="jjn-tab-item">
+      <i class="iconfont icon-zhaoyouhui"></i>
+      <span>找优惠</span>
+    </a>
+    <a href="#" class="jjn-tab-item">
+      <i class="iconfont icon-a-277_dazi"></i>
+      <span>找搭子</span>
+    </a>
+    <a href="#" class="jjn-tab-item">
+      <i class="iconfont icon-chakanbangdan"></i>
+      <span>看榜单</span>
+    </a>
+    <a href="#" class="jjn-tab-item">
+      <i class="iconfont icon-wode"></i>
+      <span>我的</span>
+    </a>
+  </div>
+
+<script>
+// 24002120625 jjn
+const jjnTabs = document.querySelectorAll('.jjn-tab-item');
+jjnTabs.forEach(item => {
+  item.onclick = function (e) {
+    e.preventDefault();
+    jjnTabs.forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+  }
+})
+</script>
+</body>
+</html>

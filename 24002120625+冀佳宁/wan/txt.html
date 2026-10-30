@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>TXT便利贴墙</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:#ffffff;
+  min-height:100vh;
+  overflow:hidden;
+}
+.note{
+  position:absolute;
+  width:130px;
+  padding:10px;
+  box-shadow:2px 2px 8px #00000022;
+  border:none;
+  cursor:move;
+  font-size:13px;
+  border-radius:4px;
+  user-select:none;
+}
+</style>
+</head>
+<body>
+<script>
+const textList = [
+"崔秀彬",
+"崔然竣",
+"崔杋圭",
+"姜太显",
+"休宁凯",
+"TXT永远相见",
+"演唱会顺利",
+"平安赴约",
+"永远在一起",
+"得偿所愿",
+"万事顺意",
+"永远为档心动",
+"见面愉快",
+"好梦常在",
+"闪闪发光",
+"赴约顺利",
+"平安喜乐",
+"一直陪伴",
+"未来可期",
+"重见欢喜",
+"演唱会见",
+"一起走花路",
+"心动不止一次",
+"为你心动",
+"永远陪伴",
+"美好赴约",
+"顺利见面",
+"开心每一天",
+"温柔相待",
+"彼此照亮"
+];
+
+const colors = [
+"#ffd6e0",
+"#d6eaff",
+"#e4ffd6",
+"#fff6b0",
+"#ffe2c9",
+"#ffd1dc",
+"#c9f0ff",
+"#f7d6ff",
+"#eaffd6",
+"#ffeed6"
+];
+
+function createNote(text){
+  const div = document.createElement('div');
+  div.className = "note";
+  div.innerText = text;
+  div.style.background = colors[Math.floor(Math.random()*colors.length)];
+  div.style.left = Math.random()*window.innerWidth*0.9 + "px";
+  div.style.top = Math.random()*window.innerHeight*0.8 + "px";
+  div.style.transform = `rotate(${ (Math.random()-0.5)*10 }deg)`;
+  document.body.appendChild(div);
+
+  let dragging = false,ox,oy,nx,ny;
+  div.onmousedown = e=>{
+    dragging=true;
+    ox=e.clientX - div.offsetLeft;
+    oy=e.clientY - div.offsetTop;
+    div.style.zIndex=999;
+  }
+  document.onmousemove = e=>{
+    if(!dragging) return;
+    nx = e.clientX - ox;
+    ny = e.clientY - oy;
+    div.style.left = nx+"px";
+    div.style.top = ny+"px";
+  }
+  document.onmouseup = ()=>{
+    dragging=false;
+    div.style.zIndex=1;
+  }
+}
+
+// 先把所有文案各放一张
+textList.forEach(t=>createNote(t));
+
+// 这里加大数量，便签会更多更多
+for(let i=0;i<200;i++){
+  const randText = textList[Math.floor(Math.random()*textList.length)];
+  createNote(randText);
+}
+</script>
+</body>
+</html>
