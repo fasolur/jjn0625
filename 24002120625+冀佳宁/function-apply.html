@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  作者：冀佳宁
+  建立时间：2026-10-16
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：抓小球游戏|函数的三个方法的应用
+-->
 <html lang="en">
 
 <head>
@@ -50,6 +56,7 @@
         };//需要什么函数：小球移动、小球点击、空白点击、更新分数
 
         // 问题：如果不减去小球的宽度，直接写 Math.random() * window.innerWidth 会怎么样？
+        // 主要功能：把小球随机移动到窗口范围内的新位置，保证不超出屏幕
         function moveBall() {
             // 保证小球在屏幕内
             const maxX = window.innerWidth - game.width;
@@ -64,12 +71,14 @@
         // 更新分数
         // 普通的函数存在函数提升：函数体在后面，函数的调用在前面，
         // 有this、arguments：类数组对象，函数在调用时候传递过来的实参数字对象
+        // 主要功能：把 game.score 的最新分数写回页面的分数显示区
         function updateScore() {
             // function updateScore(a,b)
             // a=arguments[0]
             // b=arguments[1]
             document.getElementById("score").innerText = game.score;
         }
+        // 主要功能：点中小球加 2 分，刷新分数并换位置，同时阻止事件冒泡
         game.ballDom.addEventListener("click", function (e) {
             // 匿名函数有 this → 当前点击的DOM元素（.ball）
             game.score += 2;
@@ -79,6 +88,7 @@
             e.stopPropagation();
         });
         // 点击空白区域扣分
+        // 主要功能：点击空白区域扣 1 分并立即刷新分数显示
         document.body.addEventListener("click", function (e) {
 
             game.score -= 1;
@@ -86,6 +96,7 @@
             updateScore();
 
         });
+        // 主要功能：窗口尺寸变化时重新摆放小球，避免小球跑到窗口外
         window.addEventListener("resize", function () {
             moveBall();
         });

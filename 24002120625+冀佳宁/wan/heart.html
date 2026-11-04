@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  作者：冀佳宁
+  建立时间：2026-10-26
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：大号实心粉色粒子爱心
+-->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -24,6 +30,7 @@ const canvas = document.getElementById("heart");
 const ctx = canvas.getContext("2d");
 
 let W, H;
+// 主要功能：按窗口尺寸重设画布宽高，保证画面铺满全屏
 function resize(){
   W = canvas.width = window.innerWidth;
   H = canvas.height = window.innerHeight;
@@ -32,6 +39,7 @@ resize();
 window.addEventListener("resize", resize);
 
 // 爱心内部填充采样
+// 主要功能：用爱心方程随机采样，返回爱心轮廓内的一点坐标
 function getRandomHeartPoint(scale = 1){
   while(true){
     let x = (Math.random() - 0.5) * 34 * scale;
@@ -51,9 +59,11 @@ for(let i = 0; i < 4200; i++){
 }
 
 class Particle {
+  // 主要功能：创建粒子对象并调用 reset 赋初值
   constructor(){
     this.reset();
   }
+  // 主要功能：随机重置粒子的位置、大小、速度、透明度与目标点
   reset(){
     this.x = Math.random() * W - W/2;
     this.y = Math.random() * H - H/2;
@@ -62,6 +72,7 @@ class Particle {
     this.targetIndex = Math.floor(Math.random() * heartTargets.length);
     this.alpha = Math.random() * 0.7 + 0.3;
   }
+  // 主要功能：让粒子带缓动和轻微抖动地逐步靠近自己的目标点
   update(){
     const target = heartTargets[this.targetIndex];
     this.x += (target.x - this.x) * this.speed;
@@ -69,6 +80,7 @@ class Particle {
     this.x += (Math.random() - 0.5) * 0.3;
     this.y += (Math.random() - 0.5) * 0.3;
   }
+  // 主要功能：以粉色发光圆点样式绘制当前粒子
   draw(){
     ctx.beginPath();
     ctx.fillStyle = `rgba(255, 80, 150, ${this.alpha})`;
@@ -84,6 +96,7 @@ for(let i = 0; i < 4200; i++){
   particles.push(new Particle());
 }
 
+// 主要功能：每帧擦除画布、更新并绘制全部粒子，循环形成爱心动画
 function animate(){
   ctx.fillStyle = "rgba(0, 0, 0, 0.18)";
   ctx.fillRect(0, 0, W, H);

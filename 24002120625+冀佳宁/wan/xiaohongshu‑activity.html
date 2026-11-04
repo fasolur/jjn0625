@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  作者：冀佳宁
+  建立时间：2026-10-14
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：晒生活碎片，抽年度会员
+-->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8" />
@@ -598,11 +604,13 @@ const prizeList = [
 let isLottery = false;
 
 //保存本地存储
+// 主要功能：把抽奖次数、签到状态等数据写入本地存储
 function saveStorage(){
   localStorage.setItem(STORAGE_KEY,JSON.stringify(localData));
 }
 
 //toast提示
+// 主要功能：显示一段文字轻提示，到时后自动隐藏
 function showToast(msg,duration=1500){
   toastDom.innerText = msg;
   toastDom.classList.add("show");
@@ -610,6 +618,7 @@ function showToast(msg,duration=1500){
 }
 
 //渲染签到日历
+// 主要功能：按已签到的天数重绘 7 天签到日历，标出已完成的天
 function renderCalendar(){
   calendarBox.innerHTML = "";
   const weekText = ["第1天","第2天","第3天","第4天","第5天","第6天","第7天"];
@@ -623,6 +632,7 @@ function renderCalendar(){
 }
 
 //倒计时
+// 主要功能：计算并显示距活动结束的剩余天时分，结束后禁用签到与抽奖
 function updateCountdown(){
   const end = new Date("2026-12-31 23:59:59").getTime();
   const now = Date.now();
@@ -641,6 +651,7 @@ function updateCountdown(){
 setInterval(updateCountdown,1000);
 
 //背景漂浮元素
+// 主要功能：生成随机位置、字号和动画时长的漂浮 emoji 装饰
 function createFloating() {
   const emojis = ["✨", "💖", "🎀", "⭐", "💕"];
   for (let i = 0; i < 14; i++) {
@@ -655,6 +666,7 @@ function createFloating() {
 }
 
 //初始化页面
+// 主要功能：初始化漂浮装饰、签到日历、倒计时和按钮的可用状态
 function initPage(){
   createFloating();
   renderCalendar();
@@ -668,6 +680,7 @@ function initPage(){
 }
 
 //签到
+// 主要功能：处理签到，发放 1 次抽奖机会并同步日历、次数与按钮状态
 signBtn.addEventListener("click",()=>{
   if(localData.signToday){
     showToast("今日已经签到过！");
@@ -687,6 +700,7 @@ signBtn.addEventListener("click",()=>{
 });
 
 //模拟发布笔记任务
+// 主要功能：模拟完成发布笔记任务，增加 2 次抽奖机会
 taskPublish.addEventListener("click",()=>{
   localData.chance +=2;
   saveStorage();
@@ -696,12 +710,15 @@ taskPublish.addEventListener("click",()=>{
 });
 
 //打开分享弹窗
+// 主要功能：点击分享任务按钮时打开分享弹窗
 taskShare.addEventListener("click",()=>{
   shareModal.classList.add("show");
 });
+// 主要功能：关闭分享弹窗
 closeShare.addEventListener("click",()=>{
   shareModal.classList.remove("show");
 });
+// 主要功能：确认分享完成后发放 1 次抽奖机会并关闭弹窗
 shareConfirm.addEventListener("click",()=>{
   localData.chance +=1;
   saveStorage();
@@ -712,6 +729,7 @@ shareConfirm.addEventListener("click",()=>{
 });
 
 //抽奖逻辑
+// 主要功能：扣减抽奖次数并随机抽取奖品，转动转盘后弹出中奖结果与领奖表单
 lotteryBtn.addEventListener("click", () => {
   if (localData.chance <= 0 || isLottery) return;
   isLottery = true;
@@ -755,6 +773,7 @@ lotteryBtn.addEventListener("click", () => {
 });
 
 //表单校验
+// 主要功能：校验姓名、手机号和收货地址，通过后提示提交成功
 submitBtn.addEventListener("click", () => {
   let valid = true;
   errName.innerText="";errPhone.innerText="";errAddr.innerText="";
@@ -771,11 +790,13 @@ submitBtn.addEventListener("click", () => {
   modal.classList.remove("show");
 });
 
+// 主要功能：关闭中奖弹窗
 closeModal.addEventListener("click", () => {
   modal.classList.remove("show");
 });
 
 //彩带粒子
+// 主要功能：生成 40 片随机位置和配色的彩带，营造中奖氛围
 function launchConfetti() {
   const colors = ["#ff2442", "#ffd76b", "#ff6b81", "#fff", "#ff9aaf"];
   for (let i = 0; i < 40; i++) {

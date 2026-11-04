@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  作者：冀佳宁
+  建立时间：2026-09-09
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：SVG图标底部tab
+-->
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -47,6 +53,7 @@
         </div>
     </div>
     <script>
+        // 主要功能：把点击的 tab 设为选中态，并取消其余 tab 的 active 类
         function changeTab(current) {
             let tabs = document.querySelectorAll('.tab-item');
             for (let i = 0; i < tabs.length; i++) {

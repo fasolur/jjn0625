@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  作者：冀佳宁
+  建立时间：2026-10-26
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：TXT便利贴墙
+-->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -71,6 +77,7 @@ const colors = [
 "#ffeed6"
 ];
 
+// 主要功能：按文案生成一张随机配色、随机位置和角度的可拖拽便利贴
 function createNote(text){
   const div = document.createElement('div');
   div.className = "note";
@@ -82,12 +89,14 @@ function createNote(text){
   document.body.appendChild(div);
 
   let dragging = false,ox,oy,nx,ny;
+  // 主要功能：按下便签时记录鼠标相对便签的偏移量，并把便签置顶
   div.onmousedown = e=>{
     dragging=true;
     ox=e.clientX - div.offsetLeft;
     oy=e.clientY - div.offsetTop;
     div.style.zIndex=999;
   }
+  // 主要功能：拖拽过程中按鼠标位置实时更新便签的 left、top
   document.onmousemove = e=>{
     if(!dragging) return;
     nx = e.clientX - ox;
@@ -95,6 +104,7 @@ function createNote(text){
     div.style.left = nx+"px";
     div.style.top = ny+"px";
   }
+  // 主要功能：松开鼠标时结束拖拽并恢复便签的层级
   document.onmouseup = ()=>{
     dragging=false;
     div.style.zIndex=1;

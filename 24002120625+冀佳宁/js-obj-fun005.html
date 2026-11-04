@@ -1,4 +1,10 @@
 <!DOCTYPE html>
+<!--
+  作者：冀佳宁
+  建立时间：2026-10-14
+  使用大模型：DeepSeek-V4.1-Flash
+  功能名称：JS内部对象
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,6 +19,7 @@
         console.log(Math.round(8.7)); //四舍五入
         console.log(Math.random()); //随机数[0,1)
         // 获取从min到max的随机数
+        // 主要功能：返回 min 到 max 之间（含两端）的随机整数
         function getRandomNum(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
