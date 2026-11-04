@@ -6,11 +6,11 @@
 - Git repo root is this directory; **all actual work lives in `24002120625+冀佳宁/`** (student folder, serves as the site root — `index.html` is there, not at repo root).
 - Branch: `master`. Remotes: `origin` → `neusoft_wangyao_jsj/beomgyu.313` (this repo); `hueningkai` → legacy `hueningkai.git`. Push to `origin`.
 
-## Project rules (from `24002120625+冀佳宁/wy_prompt.md` — keep honoring them)
+## Project rules (from `24002120625+冀佳宁/jjn_prompt.md` — keep honoring them)
 
-1. **Naming**: new CSS class names, ids, and JS variables must be prefixed `wy_` (see `iconfont-1..4.html`). Older pages (`index.html`, `代码.html`, `obj005.html`, …) predate the rule — don't mass-rename them.
+1. **Naming**: new CSS class names, ids, and JS variables must be prefixed `jjn_` (see `iconfont-1..4.html`). Older pages (`index.html`, `代码.html`, `obj005.html`, …) predate the rule — don't mass-rename them.
 2. **Index hub**: every newly created `.html` file must get a linked card in `24002120625+冀佳宁/index.html` (课堂目录 section). Several recent files (`wan/`, `四级项目*/`, `starter-level1-0625+jjn.html`, `event005.HTML`, `function-apply.html`, `js-obj-fun005.html`) are still unlinked.
-3. **Prompt log**: before executing a task, *append* (never overwrite) an entry to `wy_prompt.md` with 时间 / 模型 / 提示词.
+3. **Prompt log**: before executing a task, *append* (never overwrite) an entry to `jjn_prompt.md` with 时间 / 模型 / 提示词.
 
 ## Skills in this repo
 

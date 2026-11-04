@@ -87,4 +87,4 @@ After successful push, print:
 - NEVER include the full private token in logs shown to the user.
 - After push succeeds, do NOT leave the token in shell history. The URL form already handles this.
 - Before pushing, ALWAYS run `git diff --cached --stat` so both you and the user can see what is being committed.
-- If `wy_prompt.md` was modified (auto-logged by project rules), include it — it is project state, not sensitive data.
+- If `jjn_prompt.md` was modified (auto-logged by project rules), include it — it is project state, not sensitive data.
