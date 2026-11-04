@@ -1,8 +1,8 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [master]
+  # 当前 Pages 源为「分支部署」，推送时由 GitHub 自带流程发布仓库根目录；
+  # 本工作流仅在需要改为「GitHub Actions」发布、或手动指定发布子目录运行时使用。
   workflow_dispatch:
 
 permissions:
