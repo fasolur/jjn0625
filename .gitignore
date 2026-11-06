@@ -16,3 +16,10 @@ bin-release/
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important
 # information for Eclipse / Flash Builder.
+
+# Trae 页面分享缓存（非源码，不纳入版本库）
+.trae-html-share-packages/
+*.zip
+
+# Swiper 官方包本地副本（页面实际走 CDN，无需入库）
+24002120625+冀佳宁/swiper/
