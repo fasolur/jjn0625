@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<!--
+  作者：冀佳宁
+  学号：24002120625
+  建立时间：2026-11-20
+  使用大模型：GLM-5.3-FlashX
+  功能名称：任务二 · 手势卡片 —— 中华美食卡片，左右滑动切换 4 道菜（触摸事件 touchstart/touchend）
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<!-- 手机页面必备三件套 ①：viewport，不写会整体缩小 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务二 · 手势卡片 · 中华美食左右滑动</title>
+<style>
+  /* 手机页面必备三件套 ②：全局去掉点击灰块 */
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: "Noto Serif SC", "SimSun", "Microsoft YaHei", serif;
+    background: #1c1512;               /* 深灶火底色，衬托卡片 */
+    color: #f5ead6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+
+  /* 页头：竖排点缀的菜牌风标题 */
+  .jjn_head {
+    margin-top: 42px;
+    text-align: center;
+    position: relative;
+  }
+  .jjn_head .jjn_seal {
+    display: inline-block;
+    font-size: 12px;
+    letter-spacing: 6px;
+    color: #d9a441;
+    border: 1px solid rgba(217, 164, 65, .5);
+    padding: 5px 14px 5px 20px;
+    margin-bottom: 14px;
+  }
+  .jjn_head h1 {
+    font-size: 30px;
+    font-weight: 600;
+    letter-spacing: 10px;
+    text-indent: 10px;      /* 抵消最后一字的字距，视觉居中 */
+    color: #f5ead6;
+  }
+  .jjn_head p {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #a08c72;
+    letter-spacing: 2px;
+  }
+
+  /* 触摸舞台：三件套 ③ 只加在这里，纵向仍交给页面滚动 */
+  .jjn_stage {
+    width: 88%;
+    max-width: 420px;
+    margin-top: 30px;
+    touch-action: pan-y;    /* 只接管横向手势，纵向滚动还给浏览器 */
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* 轨道：4 张卡片横排，靠 translateX 切换 */
+  .jjn_track {
+    display: flex;
+    transition: transform 0.3s ease;   /* 要求：0.3s 过渡动画 */
+  }
+  .jjn_slide {
+    flex: none;
+    width: 100%;
+    padding: 0 6px;
+  }
+
+  /* 菜卡：每道菜一种渐变 */
+  .jjn_card {
+    height: 380px;
+    border-radius: 22px;
+    padding: 30px 26px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, .45);
+  }
+  /* 卡片上的大水印章：每张卡的第一个字放大做底纹 */
+  .jjn_card::before {
+    content: attr(data-mark);
+    position: absolute;
+    top: -18px;
+    right: -6px;
+    font-size: 150px;
+    line-height: 1;
+    color: rgba(255, 255, 255, .12);
+    font-weight: 700;
+    pointer-events: none;
+  }
+  .jjn_dish-tag {
+    align-self: flex-start;
+    font-size: 12px;
+    letter-spacing: 3px;
+    background: rgba(0, 0, 0, .28);
+    padding: 5px 12px;
+    border-radius: 999px;
+    margin-bottom: auto;
+  }
+  .jjn_dish-name {
+    font-size: 34px;
+    letter-spacing: 6px;
+    margin-bottom: 12px;
+  }
+  .jjn_dish-desc {
+    font-size: 14px;
+    line-height: 1.9;
+    color: rgba(255, 255, 255, .88);
+    font-family: "Microsoft YaHei", sans-serif;
+  }
+  /* 四道菜各自的渐变背景 */
+  .jjn_c1 { background: linear-gradient(160deg, #8c2f24, #c9703a); }
+  .jjn_c2 { background: linear-gradient(160deg, #7c2136, #d4626a); }
+  .jjn_c3 { background: linear-gradient(160deg, #5a3a1d, #c99a4b); }
+  .jjn_c4 { background: linear-gradient(160deg, #274a35, #7fae62); }
+
+  /* 底部：页码 + 圆点指示器 */
+  .jjn_pager {
+    margin-top: 26px;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #d9a441;
+  }
+  .jjn_dots {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+  }
+  .jjn_dots i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(245, 234, 214, .25);
+    transition: all .3s;
+  }
+  .jjn_dots i.jjn_on {
+    background: #d9a441;
+    width: 22px;
+    border-radius: 4px;
+  }
+
+  /* 边界提示 toast */
+  .jjn_toast {
+    position: fixed;
+    left: 50%;
+    bottom: 64px;
+    transform: translateX(-50%) translateY(16px);
+    background: rgba(0, 0, 0, .78);
+    color: #f5ead6;
+    font-size: 13px;
+    letter-spacing: 2px;
+    padding: 10px 22px;
+    border-radius: 999px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all .3s;
+  }
+  .jjn_toast.jjn_show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  .jjn_tip {
+    margin: 26px 0 40px;
+    font-size: 12px;
+    color: #7a6a55;
+    letter-spacing: 2px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+  <header class="jjn_head">
+    <span class="jjn_seal">中华美食</span>
+    <h1>指尖食单</h1>
+    <p>左右滑动 · 翻看四道菜</p>
+  </header>
+
+  <!-- 触摸舞台：手势都在这里接管 -->
+  <div class="jjn_stage" id="jjnStage">
+    <div class="jjn_track" id="jjnTrack">
+      <div class="jjn_slide">
+        <div class="jjn_card jjn_c1" data-mark="鸭">
+          <span class="jjn_dish-tag">京 · 菜</span>
+          <h2 class="jjn_dish-name">北京烤鸭</h2>
+          <p class="jjn_dish-desc">枣红鸭皮入口即化，配荷叶饼、甜面酱与葱丝，一口卷起京城的讲究。</p>
+        </div>
+      </div>
+      <div class="jjn_slide">
+        <div class="jjn_card jjn_c2" data-mark="麻">
+          <span class="jjn_dish-tag">川 · 菜</span>
+          <h2 class="jjn_dish-name">麻婆豆腐</h2>
+          <p class="jjn_dish-desc">麻辣烫嫩酥香，豆腐颤而不散，一勺红油的功夫全在火候里。</p>
+        </div>
+      </div>
+      <div class="jjn_slide">
+        <div class="jjn_card jjn_c3" data-mark="小">
+          <span class="jjn_dish-tag">沪 · 点</span>
+          <h2 class="jjn_dish-name">蟹黄小笼</h2>
+          <p class="jjn_dish-desc">十八道褶收出一兜滚烫的汤汁，先开窗、后喝汤，是老上海的门道。</p>
+        </div>
+      </div>
+      <div class="jjn_slide">
+        <div class="jjn_card jjn_c4" data-mark="糖">
+          <span class="jjn_dish-tag">鲁 · 菜</span>
+          <h2 class="jjn_dish-name">糖醋里脊</h2>
+          <p class="jjn_dish-desc">外壳酥脆挂琥珀糖衣，酸甜先声夺人，是桌面上最先见底的一道。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="jjn_pager">第 <span id="jjnPageNow">1</span> / <span id="jjnPageAll">4</span> 张</div>
+  <div class="jjn_dots" id="jjnDots"><i class="jjn_on"></i><i></i><i></i><i></i></div>
+  <p class="jjn_tip">向左滑 → 下一道 · 向右滑 ← 上一道</p>
+
+  <div class="jjn_toast" id="jjnToast"></div>
+
+<script>
+/* 任务二：手势卡片 —— 记起点 → changedTouches[0] 算差值 → 与 40px 阈值比较 */
+  var jjn_stage  = document.getElementById('jjnStage');
+  var jjn_track  = document.getElementById('jjnTrack');
+  var jjn_toast  = document.getElementById('jjnToast');
+  var jjn_now    = document.getElementById('jjnPageNow');
+  var jjn_dots   = document.getElementById('jjnDots').children;
+
+  var jjn_total   = 4;    // 卡片总数
+  var jjn_index   = 0;    // 当前卡片下标（0 ~ 3）
+  var jjn_startX  = 0;    // 按下时的横坐标
+  var jjn_line    = 40;   // 滑动阈值：小于 40px 视为误触
+  var jjn_lock    = false;// 冷却锁：防止快速连滑一次跳两张
+  var jjn_toastTimer = null;
+
+  // 主要功能：记录按下起点（touchstart，取 touches[0]）
+  jjn_stage.addEventListener('touchstart', function (e) {
+    jjn_startX = e.touches[0].clientX;
+  }, { passive: true });
+
+  // 主要功能：抬手时用 changedTouches[0] 算横向位移，判断方向并切换卡片
+  jjn_stage.addEventListener('touchend', function (e) {
+    if (jjn_lock) { return; }              // 300ms 冷却期内忽略新滑动
+    var jjn_dx = e.changedTouches[0].clientX - jjn_startX; // touches 里已没这根手指
+    if (Math.abs(jjn_dx) < jjn_line) { return; }           // 误触，不算滑动
+
+    if (jjn_dx < 0) {
+      jjn_go(jjn_index + 1, '已经是最后一张');   // 左滑 → 下一张
+    } else {
+      jjn_go(jjn_index - 1, '已经是第一张');     // 右滑 → 上一张
+    }
+  });
+
+  // 主要功能：切换到指定卡片，越界弹提示，切换后开 300ms 冷锁并刷新页码指示器
+  function jjn_go(jjn_next, jjn_edgeText) {
+    if (jjn_next < 0 || jjn_next > jjn_total - 1) {  // 边界：给提示，不切换
+      jjn_toast.textContent = jjn_edgeText;
+      jjn_toast.classList.add('jjn_show');
+      clearTimeout(jjn_toastTimer);
+      jjn_toastTimer = setTimeout(function () {
+        jjn_toast.classList.remove('jjn_show');
+      }, 1200);
+      return;
+    }
+    jjn_index = jjn_next;
+    jjn_lock = true;                          // 冷却 300ms，期间滑动无效
+    setTimeout(function () { jjn_lock = false; }, 300);
+
+    jjn_track.style.transform = 'translateX(' + (-jjn_index * 100) + '%)';
+    jjn_now.textContent = jjn_index + 1;
+    for (var i = 0; i < jjn_dots.length; i++) {
+      jjn_dots[i].className = (i === jjn_index) ? 'jjn_on' : '';
+    }
+  }
+</script>
+</body>
+</html>

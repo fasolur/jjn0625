@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!--
+  作者：冀佳宁
+  学号：24002120625
+  建立时间：2026-11-20
+  使用大模型：GLM-5.3-FlashX
+  功能名称：任务三 · 图片查看器 —— 双指缩放(1~4x) + 双击放大 + 单指拖动（触摸事件三件套综合）
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<!-- 手机页面必备三件套 ①：viewport -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>任务三 · 图片查看器 · 双指缩放</title>
+<style>
+  /* 三件套 ②：全局去点击灰块 */
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: #101014;
+    color: #e8e6e0;
+    min-height: 100vh;
+  }
+
+  .jjn_top {
+    padding: 34px 22px 18px;
+    text-align: center;
+  }
+  .jjn_top h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: #f2efe8;
+  }
+  .jjn_top p {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #8b897f;
+    line-height: 1.8;
+  }
+
+  /* 缩放倍数指示器（加分项） */
+  .jjn_scale-badge {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #d8b25c;
+    border: 1px solid rgba(216, 178, 92, .45);
+    padding: 5px 16px;
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 查看器容器：三件套 ③ —— 这一块的手势全部归我 */
+  .jjn_viewer {
+    width: 92%;
+    max-width: 480px;
+    height: 66vh;
+    margin: 16px auto 10px;
+    border-radius: 18px;
+    overflow: hidden;          /* 图片放大后超出部分裁掉 */
+    background: #000;
+    touch-action: none;        /* 手势归我，浏览器别滚别缩放 */
+    user-select: none;         /* 长按不选中 */
+    -webkit-touch-callout: none; /* iOS 长按不弹系统菜单 */
+    position: relative;
+    box-shadow: 0 16px 44px rgba(0, 0, 0, .6);
+  }
+  .jjn_viewer img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: center center;  /* 以中心为原点，方便边界计算 */
+    will-change: transform;
+    pointer-events: none;
+  }
+  /* 双击切换时的 0.25s 过渡；手势过程中移除，保证跟手 */
+  .jjn_viewer img.jjn_anim { transition: transform 0.25s ease-out; }
+
+  .jjn_hint {
+    text-align: center;
+    font-size: 12px;
+    color: #6f6d64;
+    letter-spacing: 2px;
+    padding-bottom: 40px;
+    line-height: 2;
+  }
+</style>
+</head>
+<body>
+
+  <div class="jjn_top">
+    <h1>千里江山 · 细观</h1>
+    <p>双指缩放请用手机打开（或浏览器设备模式）<br>双击可在 1x / 2x 之间切换</p>
+    <div class="jjn_scale-badge">当前倍数 <span id="jjnScaleText">1.00</span>x</div>
+  </div>
+
+  <div class="jjn_viewer" id="jjnViewer">
+    <img id="jjnImg" alt="青绿山水长卷"
+         src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=traditional%20Chinese%20green-and-blue%20landscape%20painting%20scroll%2C%20misty%20mountains%20and%20rivers%2C%20fine%20brushwork%2C%20rich%20details%20of%20trees%20pavilions%20and%20boats%2C%20mineral%20green%20and%20azurite%20pigments%2C%20silk%20texture%2C%20masterpiece&image_size=portrait_4_3">
+  </div>
+
+  <p class="jjn_hint">双指捏合缩小 · 张开放大（1x ~ 4x）<br>放大后单指拖动查看细节 · 缩回 1x 自动居中</p>
+
+<script>
+/* 任务三：图片查看器
+   核心思路（保证“缩放不跳”）：每一帧算出双指中点在容器里的坐标，
+   按帧比例更新 scale 的同时，反算出新的平移量，让“同一张图的同一个点”
+   始终留在双指中点下方——中点不动，图就不会跳。 */
+  var jjn_viewer = document.getElementById('jjnViewer');
+  var jjn_img    = document.getElementById('jjnImg');
+  var jjn_text   = document.getElementById('jjnScaleText');
+
+  var jjn_scale   = 1;      // 当前倍数（1 ~ 4）
+  var jjn_tx      = 0;      // 当前平移量
+  var jjn_ty      = 0;
+  var jjn_lastDist = 0;     // 上一帧两指距离（0 表示新的一轮手势）
+  var jjn_lastTap  = 0;     // 上次点击时间，用于双击判断
+  var jjn_maxS     = 4;     // 缩放上限
+
+  // 主要功能：算两根手指之间的直线距离（勾股定理）
+  function jjn_dist(jjn_a, jjn_b) {
+    return Math.hypot(jjn_b.clientX - jjn_a.clientX, jjn_b.clientY - jjn_a.clientY);
+  }
+
+  // 主要功能：按容器当前尺寸算出平移边界，超过边界的位移被拉回，保证 1x 不拖动、放大不拖出黑边
+  function jjn_clamp() {
+    var jjn_w = jjn_viewer.clientWidth;
+    var jjn_h = jjn_viewer.clientHeight;
+    var jjn_mx = jjn_w * (jjn_scale - 1) / 2;   // scale 倍数下允许的最大水平位移
+    var jjn_my = jjn_h * (jjn_scale - 1) / 2;
+    if (jjn_tx >  jjn_mx) { jjn_tx =  jjn_mx; }
+    if (jjn_tx < -jjn_mx) { jjn_tx = -jjn_mx; }
+    if (jjn_ty >  jjn_my) { jjn_ty =  jjn_my; }
+    if (jjn_ty < -jjn_my) { jjn_ty = -jjn_my; }
+  }
+
+  // 主要功能：把 scale / 平移写进 transform 并刷新倍数指示器
+  function jjn_render() {
+    jjn_img.style.transform = 'translate(' + jjn_tx + 'px,' + jjn_ty + 'px) scale(' + jjn_scale + ')';
+    jjn_text.textContent = jjn_scale.toFixed(2);
+  }
+
+  // 主要功能：以某点 (px,py) 为锚点把倍数缩放到 targetS —— 反算平移量，锚点下的图像点保持不动（不跳的关键）
+  function jjn_zoomAt(jjn_px, jjn_py, jjn_targetS) {
+    var jjn_s0 = jjn_scale;
+    jjn_scale = Math.min(jjn_maxS, Math.max(1, jjn_targetS)); // 边界限制
+    var jjn_cx = jjn_viewer.clientWidth  / 2;
+    var jjn_cy = jjn_viewer.clientHeight / 2;
+    var jjn_k  = jjn_scale / jjn_s0;
+    // 推导：锚点固定 → t' = (锚点-中心)*(1-k) + t*k
+    jjn_tx = (jjn_px - jjn_cx) * (1 - jjn_k) + jjn_tx * jjn_k;
+    jjn_ty = (jjn_py - jjn_cy) * (1 - jjn_k) + jjn_ty * jjn_k;
+    jjn_clamp();
+    jjn_render();
+  }
+
+  // 主要功能：回到 1x 并居中（缩回 1x 自动居中）
+  function jjn_reset() {
+    jjn_scale = 1; jjn_tx = 0; jjn_ty = 0;
+    jjn_render();
+  }
+
+  // 主要功能：touchstart —— 记录手指状态；双指开始时清掉上一轮残留距离，单指时准备拖动 / 双击
+  jjn_viewer.addEventListener('touchstart', function (e) {
+    jjn_img.classList.remove('jjn_anim');     // 手势过程去掉过渡，保证跟手
+    if (e.touches.length >= 2) {
+      jjn_lastDist = jjn_dist(e.touches[0], e.touches[1]);  // 双指初始距离
+    } else {
+      jjn_lastDist = 0;                       // 新一轮手势，清空旧数据防跳变
+    }
+  }, { passive: true });
+
+  // 主要功能：touchmove —— 双指按帧距离比缩放（以两指中点为基准）；单指拖动在下方单独监听
+  jjn_viewer.addEventListener('touchmove', function (e) {
+    if (e.touches.length >= 2) {
+      e.preventDefault();                      // 阻止浏览器默认整页缩放
+      var jjn_d = jjn_dist(e.touches[0], e.touches[1]);
+      if (jjn_lastDist > 0) {                  // 第一帧没有“上一帧”，先跳过
+        var jjn_r = jjn_viewer.getBoundingClientRect();
+        var jjn_mx = (e.touches[0].clientX + e.touches[1].clientX) / 2 - jjn_r.left;
+        var jjn_my = (e.touches[0].clientY + e.touches[1].clientY) / 2 - jjn_r.top;
+        jjn_zoomAt(jjn_mx, jjn_my, jjn_scale * (jjn_d / jjn_lastDist)); // 帧比例缩放，中点为锚
+      }
+      jjn_lastDist = jjn_d;                    // 本帧存下来，给下一帧当“上一帧”
+    }
+  }, { passive: false });
+
+  /* 单指拖动需要“上一帧手指位置”，单独记一个起点，与缩放状态分开维护 */
+  var jjn_dragX = 0, jjn_dragY = 0;
+
+  // 主要功能：单指按下时记录拖动起点（仅放大后允许拖）
+  jjn_viewer.addEventListener('touchstart', function (e) {
+    if (e.touches.length === 1) {
+      jjn_dragX = e.touches[0].clientX;
+      jjn_dragY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  // 主要功能：单指且 scale>1 时跟手拖动，实时夹在边界内
+  jjn_viewer.addEventListener('touchmove', function (e) {
+    if (e.touches.length === 1 && jjn_scale > 1) {
+      e.preventDefault();
+      var jjn_t = e.touches[0];
+      jjn_tx += jjn_t.clientX - jjn_dragX;
+      jjn_ty += jjn_t.clientY - jjn_dragY;
+      jjn_dragX = jjn_t.clientX;
+      jjn_dragY = jjn_t.clientY;
+      jjn_clamp();
+      jjn_render();
+    }
+  }, { passive: false });
+
+  // 主要功能：touchend —— 双击判断（间隔 <300ms 在 1x/2x 间切换，带 0.25s 过渡）；双指抬起一根时重置距离基准
+  jjn_viewer.addEventListener('touchend', function (e) {
+    if (e.touches.length === 1) {
+      jjn_lastDist = 0;                        // 从双指变单指，防止距离基准错乱
+      jjn_dragX = e.touches[0].clientX;        // 重置拖动起点，衔接单指拖动
+      jjn_dragY = e.touches[0].clientY;
+      return;
+    }
+    if (e.touches.length === 0) {
+      var jjn_now = Date.now();
+      if (jjn_now - jjn_lastTap < 300) {       // 双击
+        jjn_img.classList.add('jjn_anim');     // 过渡只在切换瞬间加
+        if (jjn_scale > 1) {
+          jjn_reset();                         // 已放大 → 回 1x 居中
+        } else {
+          var jjn_r  = jjn_viewer.getBoundingClientRect();
+          jjn_zoomAt(e.changedTouches[0].clientX - jjn_r.left,
+                     e.changedTouches[0].clientY - jjn_r.top, 2);  // 以点击处为锚放大到 2x
+        }
+        jjn_lastTap = 0;                       // 重置，避免三击连触
+      } else {
+        jjn_lastTap = jjn_now;
+      }
+      jjn_clamp();                             // 松手兜底：把图夹回边界内
+      jjn_render();
+    }
+  });
+
+  // 主要功能：touchcancel —— 被来电/通知打断时清理状态，避免卡死
+  jjn_viewer.addEventListener('touchcancel', function () {
+    jjn_lastDist = 0;
+    jjn_img.classList.remove('jjn_anim');
+    jjn_clamp();
+    jjn_render();
+  });
+
+  // 主要功能：横竖屏切换 / 尺寸变化时重新夹取边界（防抖 200ms），保证缩放状态不丢、不越界
+  var jjn_resizeTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(jjn_resizeTimer);
+    jjn_resizeTimer = setTimeout(function () {
+      jjn_clamp();
+      jjn_render();
+    }, 200);
+  });
+</script>
+</body>
+</html>

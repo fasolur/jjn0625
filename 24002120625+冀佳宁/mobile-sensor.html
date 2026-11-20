@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<!--
+  作者：冀佳宁
+  学号：24002120625
+  建立时间：2026-11-20
+  使用大模型：GLM-5.3-FlashX
+  功能名称：任务四 · 摇一摇彩蛋 —— devicemotion 摇动手机抽今日菜谱（含 iOS 权限申请与降级方案）
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<!-- 手机页面必备三件套 ①：viewport -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任务四 · 摇一摇 · 抽今日菜谱</title>
+<style>
+  /* 三件套 ②：全局去点击灰块 */
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    background: #f3ede1;               /* 宣纸底 */
+    color: #3d3227;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .jjn_head { margin-top: 46px; text-align: center; }
+  .jjn_head h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 8px;
+    text-indent: 8px;
+    color: #8c2f24;                    /* 朱砂红 */
+  }
+  .jjn_head p {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #8d7f6a;
+    letter-spacing: 2px;
+    line-height: 1.9;
+  }
+
+  /* 签筒：摇一摇的目标图形 */
+  .jjn_pot {
+    margin-top: 34px;
+    width: 130px;
+    height: 150px;
+    position: relative;
+  }
+  .jjn_pot .jjn_sticks {
+    position: absolute;
+    top: -26px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 84px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+  }
+  .jjn_pot .jjn_sticks i {
+    width: 8px;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(#c99a4b, #a8763a);
+  }
+  .jjn_pot .jjn_sticks i:nth-child(2) { height: 86%; }
+  .jjn_pot .jjn_sticks i:nth-child(3) { height: 94%; }
+  .jjn_pot .jjn_sticks i:nth-child(4) { height: 82%; }
+  .jjn_pot .jjn_sticks i:nth-child(5) { height: 90%; }
+  .jjn_pot .jjn_body {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 110px;
+    border-radius: 14px 14px 22px 22px;
+    background: linear-gradient(160deg, #5a3a1d, #7c5a30);
+    box-shadow: 0 14px 30px rgba(61, 50, 39, .35), inset 0 -8px 16px rgba(0, 0, 0, .3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .jjn_pot .jjn_body span {
+    writing-mode: vertical-lr;         /* 竖排“今日菜谱” */
+    letter-spacing: 8px;
+    color: #f3ede1;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  /* 摇动时的晃动动画 */
+  @keyframes jjn_shake {
+    0%, 100% { transform: rotate(0); }
+    20%  { transform: rotate(-9deg); }
+    40%  { transform: rotate(8deg); }
+    60%  { transform: rotate(-7deg); }
+    80%  { transform: rotate(6deg); }
+  }
+  .jjn_pot.jjn_shaking { animation: jjn_shake .5s ease; }
+
+  /* 结果签文 */
+  .jjn_result {
+    margin-top: 34px;
+    width: 82%;
+    max-width: 380px;
+    min-height: 120px;
+    border: 1px solid #d9c9a8;
+    border-radius: 14px;
+    background: #fffdf6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 22px 20px;
+    text-align: center;
+    box-shadow: 0 8px 22px rgba(61, 50, 39, .12);
+  }
+  .jjn_result .jjn_dish { font-size: 22px; font-weight: 700; letter-spacing: 4px; color: #8c2f24; }
+  .jjn_result .jjn_why  { margin-top: 10px; font-size: 13px; color: #8d7f6a; line-height: 1.9; }
+  /* 抽中时的弹出动画 */
+  @keyframes jjn_pop {
+    0%   { transform: scale(.6); opacity: 0; }
+    60%  { transform: scale(1.06); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  .jjn_result.jjn_pop { animation: jjn_pop .45s cubic-bezier(.34, 1.56, .64, 1); }
+
+  /* 开启按钮 / 降级按钮 */
+  .jjn_btn {
+    margin-top: 26px;
+    font-size: 15px;
+    letter-spacing: 3px;
+    color: #f3ede1;
+    background: #8c2f24;
+    border: none;
+    border-radius: 999px;
+    padding: 13px 42px;
+    box-shadow: 0 8px 20px rgba(140, 47, 36, .35);
+  }
+  .jjn_btn:active { opacity: .85; }     /* 移动端用 active，不用 hover */
+  .jjn_btn.jjn_hide { display: none; }
+
+  .jjn_warn {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #a3542c;
+    letter-spacing: 1px;
+    display: none;
+  }
+  .jjn_warn.jjn_show { display: block; }
+
+  /* 说明：为什么必须做降级 */
+  .jjn_note {
+    margin: 36px 20px 44px;
+    max-width: 420px;
+    font-size: 12.5px;
+    color: #8d7f6a;
+    line-height: 2.1;
+    border-top: 1px dashed #d9c9a8;
+    padding-top: 18px;
+  }
+  .jjn_note b { color: #5a3a1d; }
+</style>
+</head>
+<body>
+
+  <header class="jjn_head">
+    <h1>摇签问膳</h1>
+    <p>摇一摇手机 · 抽今日菜谱<br>（传感器事件必须真机测试，电脑浏览器收不到数据）</p>
+  </header>
+
+  <div class="jjn_pot" id="jjnPot">
+    <div class="jjn_sticks"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="jjn_body"><span>今日菜谱</span></div>
+  </div>
+
+  <div class="jjn_result" id="jjnResult">
+    <div class="jjn_dish" id="jjnDish">？？</div>
+    <div class="jjn_why" id="jjnWhy">摇动手机，签筒会替你做决定</div>
+  </div>
+
+  <button class="jjn_btn" id="jjnBtn">开启摇一摇</button>
+  <button class="jjn_btn jjn_hide" id="jjnBtnFall">点我抽一次</button>
+  <p class="jjn_warn" id="jjnWarn">当前设备不支持，请用手机打开</p>
+
+  <div class="jjn_note">
+    <b>为什么必须做降级：</b>
+    devicemotion 依赖加速度传感器，电脑浏览器、部分平板与模拟器上根本没有数据；
+    iOS 13+ 还要求用户主动点击授权，拒绝授权后同样拿不到读数。
+    如果不做“无传感器 → 提示 + 手动抽签按钮”的降级分支，
+    这些设备上页面就是一片死寂甚至控制台报错（评分维度“降级与排错”占 15 分）。
+    <br><b>accelerationIncludingGravity 与 acceleration 的区别：</b>
+    前者包含重力分量（静止时约 9.8 m/s²），不需要陀螺仪就能用；
+    后者是去掉了重力的纯线性加速度，静止时约为 0，部分安卓设备不提供。
+    所以摇一摇用前者合成幅值判断更稳。
+  </div>
+
+<script>
+/* 任务四：摇一摇抽菜谱 —— devicemotion + accelerationIncludingGravity，阈值 18，冷却 1.5s，含降级 */
+  var jjn_btn     = document.getElementById('jjnBtn');      // 开启按钮（iOS 需点击授权）
+  var jjn_btnFall = document.getElementById('jjnBtnFall');  // 降级按钮
+  var jjn_warn    = document.getElementById('jjnWarn');
+  var jjn_pot     = document.getElementById('jjnPot');
+  var jjn_result  = document.getElementById('jjnResult');
+  var jjn_dish    = document.getElementById('jjnDish');
+  var jjn_why     = document.getElementById('jjnWhy');
+
+  var jjn_menu    = [                        // 菜谱池
+    '番茄牛腩 · 慢炖两小时，汤汁拌饭一绝',
+    '蒜蓉西兰花 · 五分钟快手，清爽解腻',
+    '可乐鸡翅 · 甜咸适口，新手零失败',
+    '酸辣土豆丝 · 火候要快，脆爽关键在醋',
+    '冬瓜排骨汤 · 一小时慢煨，清润去火',
+    '麻酱拌面 · 芝麻酱澥开是灵魂，配黄瓜丝'
+  ];
+  var jjn_cool    = 1500;   // 冷却 1.5s：一次摇动只触发一次
+  var jjn_last    = 0;      // 上次触发时间戳
+  var jjn_line    = 18;     // 摇动阈值（合成加速度，含重力约 9.8，>18 说明在用力摇）
+  var jjn_started = false;  // 是否已开始监听
+  var jjn_gotData = false;  // 是否收到过传感器数据
+  var jjn_checkTimer = null;
+
+  // 主要功能：随机抽一道菜并弹出显示，同时播放签筒晃动动画
+  function jjn_draw() {
+    var jjn_pick = jjn_menu[Math.floor(Math.random() * jjn_menu.length)];
+    var jjn_arr  = jjn_pick.split(' · ');
+    jjn_dish.textContent = jjn_arr[0];
+    jjn_why.textContent  = '今日就它：' + jjn_arr[1];
+
+    jjn_result.classList.remove('jjn_pop');  // 先移除再强制回流，保证动画可重复播放
+    void jjn_result.offsetWidth;
+    jjn_result.classList.add('jjn_pop');
+    jjn_pot.classList.remove('jjn_shaking');
+    void jjn_pot.offsetWidth;
+    jjn_pot.classList.add('jjn_shaking');
+  }
+
+  // 主要功能：devicemotion 回调 —— 取 accelerationIncludingGravity 算合成幅值，超过阈值且过了冷却才触发
+  function jjn_onMotion(e) {
+    var jjn_g = e.accelerationIncludingGravity;
+    if (!jjn_g || jjn_g.x === null) { return; }        // 没有数据：等降级检测接管
+    jjn_gotData = true;
+    var jjn_a = Math.sqrt(jjn_g.x * jjn_g.x + jjn_g.y * jjn_g.y + jjn_g.z * jjn_g.z);
+    var jjn_now = Date.now();
+    if (jjn_a > jjn_line && jjn_now - jjn_last > jjn_cool) {  // 阈值 + 冷却，防一次摇动触发十几次
+      jjn_last = jjn_now;
+      jjn_draw();
+    }
+  }
+
+  // 主要功能：开始监听（作为 iOS 授权成功 / 普通设备直接启动的统一入口），并启动 2s 无数据降级检测
+  function jjn_start() {
+    if (jjn_started) { return; }
+    jjn_started = true;
+    window.addEventListener('devicemotion', jjn_onMotion);
+    // 2 秒内一条数据都没有 → 判定不支持，显示提示与降级按钮
+    jjn_checkTimer = setTimeout(function () {
+      if (!jjn_gotData) {
+        jjn_warn.classList.add('jjn_show');
+        jjn_btnFall.classList.remove('jjn_hide');
+        jjn_btn.classList.add('jjn_hide');
+      }
+    }, 2000);
+    jjn_why.textContent = '用力摇一摇手机试试';
+  }
+
+  // 主要功能：开启按钮 —— iOS 13+ 必须由用户点击后申请权限，其他设备直接开始监听
+  jjn_btn.addEventListener('click', function () {
+    if (typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission()
+        .then(function (jjn_state) {
+          if (jjn_state === 'granted') { jjn_start(); }
+          else { jjn_warn.classList.add('jjn_show'); jjn_btnFall.classList.remove('jjn_hide'); }
+        })
+        .catch(function () {
+          jjn_warn.classList.add('jjn_show');
+          jjn_btnFall.classList.remove('jjn_hide');    // 授权失败也走降级
+        });
+    } else {
+      jjn_start();                                     // 非 iOS：无需授权
+    }
+  });
+
+  // 主要功能：降级按钮 —— 不支持传感器的设备手动抽一次，保证任何设备都能用
+  jjn_btnFall.addEventListener('click', jjn_draw);
+</script>
+</body>
+</html>
