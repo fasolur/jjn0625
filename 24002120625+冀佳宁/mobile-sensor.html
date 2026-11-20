@@ -187,6 +187,32 @@
   }
   .jjn_warn.jjn_show { display: block; }
 
+  /* 真机演示：默认折叠不占空间，展开后两个视频并排 */
+  .jjn_demo {
+    margin-top: 14px;
+    max-height: 62dvh;
+    overflow-y: auto;
+  }
+  .jjn_demo summary {
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: #a3875c;
+    cursor: pointer;
+    text-align: center;
+  }
+  .jjn_demo .jjn_videos {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .jjn_demo video {
+    width: calc(50% - 5px);
+    max-width: 200px;
+    border-radius: 10px;
+    background: #000;
+  }
+
   /* 说明：为什么必须做降级（悬浮可滚动小字区） */
   .jjn_note {
     margin: 10px auto 0;
@@ -227,6 +253,14 @@
     <button class="jjn_btn" id="jjnBtn">开启摇一摇</button>
     <button class="jjn_btn jjn_hide" id="jjnBtnFall">点我抽一次</button>
     <p class="jjn_warn" id="jjnWarn">当前设备不支持，请用手机打开</p>
+
+    <details class="jjn_demo">
+      <summary>真机运行演示（点开看视频）</summary>
+      <div class="jjn_videos">
+        <video src="video/jjn_demo1.mp4" controls playsinline preload="metadata"></video>
+        <video src="video/jjn_demo2.mp4" controls playsinline preload="metadata"></video>
+      </div>
+    </details>
 
     <div class="jjn_note">
       <b>为什么必须做降级：</b>devicemotion / deviceorientation 都依赖传感器，电脑浏览器/模拟器没有数据；
