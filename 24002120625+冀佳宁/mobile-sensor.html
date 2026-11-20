@@ -4,58 +4,79 @@
   学号：24002120625
   建立时间：2026-11-20
   使用大模型：GLM-5.3-FlashX
-  功能名称：任务四 · 摇一摇彩蛋 —— devicemotion 摇动手机抽今日菜谱（含 iOS 权限申请与降级方案）
+  功能名称：任务四 · 摇一摇彩蛋 —— devicemotion 摇动手机抽今日菜谱（手机版全屏布局，含 iOS 权限与降级）
 -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<!-- 手机页面必备三件套 ①：viewport -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 手机页面必备三件套 ①：viewport（viewport-fit=cover 适配刘海屏安全区） -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>任务四 · 摇一摇 · 抽今日菜谱</title>
 <style>
   /* 三件套 ②：全局去点击灰块 */
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+  html, body { height: 100%; }
+
   body {
     font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-    background: #f3ede1;               /* 宣纸底 */
-    color: #3d3227;
-    min-height: 100vh;
+    /* 手机版：整页全屏，微信摇一摇式的深色舞台 */
+    height: 100dvh;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    color: #f3ede1;
+    background:
+      radial-gradient(120% 60% at 50% -10%, #3a2417 0%, rgba(58, 36, 23, 0) 60%),
+      #14100b;
   }
 
-  .jjn_head { margin-top: 46px; text-align: center; }
+  /* 顶栏 */
+  .jjn_head {
+    flex: none;
+    padding: calc(env(safe-area-inset-top, 0px) + 22px) 20px 0;
+    text-align: center;
+  }
   .jjn_head h1 {
-    font-size: 26px;
+    font-size: 25px;
     font-weight: 700;
-    letter-spacing: 8px;
-    text-indent: 8px;
-    color: #8c2f24;                    /* 朱砂红 */
+    letter-spacing: 9px;
+    text-indent: 9px;
+    color: #e8b96a;
   }
   .jjn_head p {
-    margin-top: 10px;
+    margin-top: 8px;
     font-size: 13px;
-    color: #8d7f6a;
+    color: #9b8a6f;
     letter-spacing: 2px;
     line-height: 1.9;
   }
 
+  /* 中部舞台：签筒 + 结果，占满剩余屏幕 */
+  .jjn_main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+  }
+
   /* 签筒：摇一摇的目标图形 */
   .jjn_pot {
-    margin-top: 34px;
-    width: 130px;
-    height: 150px;
+    width: 132px;
+    height: 158px;
     position: relative;
+    flex: none;
   }
   .jjn_pot .jjn_sticks {
     position: absolute;
     top: -26px;
     left: 50%;
     transform: translateX(-50%);
-    width: 84px;
-    height: 60px;
+    width: 86px;
+    height: 62px;
     display: flex;
     justify-content: center;
     gap: 5px;
@@ -73,10 +94,10 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 110px;
+    height: 112px;
     border-radius: 14px 14px 22px 22px;
     background: linear-gradient(160deg, #5a3a1d, #7c5a30);
-    box-shadow: 0 14px 30px rgba(61, 50, 39, .35), inset 0 -8px 16px rgba(0, 0, 0, .3);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, .5), inset 0 -8px 16px rgba(0, 0, 0, .3);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,25 +119,26 @@
   }
   .jjn_pot.jjn_shaking { animation: jjn_shake .5s ease; }
 
-  /* 结果签文 */
+  /* 结果签文：贴在下三分之一处，拇指视线区 */
   .jjn_result {
-    margin-top: 34px;
-    width: 82%;
-    max-width: 380px;
-    min-height: 120px;
-    border: 1px solid #d9c9a8;
-    border-radius: 14px;
-    background: #fffdf6;
+    margin-top: 30px;
+    width: 100%;
+    max-width: 400px;
+    min-height: 112px;
+    border: 1px solid rgba(217, 201, 168, .4);
+    border-radius: 16px;
+    background: rgba(255, 253, 246, .96);
+    color: #3d3227;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 22px 20px;
+    padding: 20px 22px;
     text-align: center;
-    box-shadow: 0 8px 22px rgba(61, 50, 39, .12);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
   }
   .jjn_result .jjn_dish { font-size: 22px; font-weight: 700; letter-spacing: 4px; color: #8c2f24; }
-  .jjn_result .jjn_why  { margin-top: 10px; font-size: 13px; color: #8d7f6a; line-height: 1.9; }
+  .jjn_result .jjn_why  { margin-top: 9px; font-size: 13px; color: #8d7f6a; line-height: 1.9; }
   /* 抽中时的弹出动画 */
   @keyframes jjn_pop {
     0%   { transform: scale(.6); opacity: 0; }
@@ -125,78 +147,85 @@
   }
   .jjn_result.jjn_pop { animation: jjn_pop .45s cubic-bezier(.34, 1.56, .64, 1); }
 
-  /* 开启按钮 / 降级按钮 */
+  /* 底栏：大按钮，避开底部手势条 */
+  .jjn_foot {
+    flex: none;
+    text-align: center;
+    padding: 0 24px calc(env(safe-area-inset-bottom, 0px) + 24px);
+  }
   .jjn_btn {
-    margin-top: 26px;
-    font-size: 15px;
-    letter-spacing: 3px;
-    color: #f3ede1;
-    background: #8c2f24;
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    font-size: 16px;
+    letter-spacing: 4px;
+    text-indent: 4px;
+    color: #14100b;
+    background: #e8b96a;
     border: none;
     border-radius: 999px;
-    padding: 13px 42px;
-    box-shadow: 0 8px 20px rgba(140, 47, 36, .35);
+    padding: 15px 0;
+    font-weight: 600;
+    box-shadow: 0 10px 24px rgba(232, 185, 106, .25);
   }
-  .jjn_btn:active { opacity: .85; }     /* 移动端用 active，不用 hover */
+  .jjn_btn:active { opacity: .82; }     /* 移动端用 active，不用 hover */
   .jjn_btn.jjn_hide { display: none; }
-
   .jjn_warn {
-    margin-top: 20px;
+    margin-top: 12px;
     font-size: 13px;
-    color: #a3542c;
+    color: #d98d5f;
     letter-spacing: 1px;
     display: none;
   }
   .jjn_warn.jjn_show { display: block; }
 
-  /* 说明：为什么必须做降级 */
+  /* 说明：为什么必须做降级（悬浮可滚动小字区） */
   .jjn_note {
-    margin: 36px 20px 44px;
-    max-width: 420px;
-    font-size: 12.5px;
-    color: #8d7f6a;
-    line-height: 2.1;
-    border-top: 1px dashed #d9c9a8;
-    padding-top: 18px;
+    margin: 10px auto 0;
+    max-width: 400px;
+    font-size: 12px;
+    color: #7a6c56;
+    line-height: 2;
+    border-top: 1px dashed rgba(217, 201, 168, .3);
+    padding-top: 10px;
   }
-  .jjn_note b { color: #5a3a1d; }
+  .jjn_note b { color: #a3875c; }
 </style>
 </head>
 <body>
 
   <header class="jjn_head">
     <h1>摇签问膳</h1>
-    <p>摇一摇手机 · 抽今日菜谱<br>（传感器事件必须真机测试，电脑浏览器收不到数据）</p>
+    <p>摇一摇手机 · 抽今日菜谱<br>（传感器必须真机测试，电脑收不到数据）</p>
   </header>
 
-  <div class="jjn_pot" id="jjnPot">
-    <div class="jjn_sticks"><i></i><i></i><i></i><i></i><i></i></div>
-    <div class="jjn_body"><span>今日菜谱</span></div>
+  <div class="jjn_main">
+    <div class="jjn_pot" id="jjnPot">
+      <div class="jjn_sticks"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="jjn_body"><span>今日菜谱</span></div>
+    </div>
+
+    <div class="jjn_result" id="jjnResult">
+      <div class="jjn_dish" id="jjnDish">？？</div>
+      <div class="jjn_why" id="jjnWhy">摇动手机，签筒会替你做决定</div>
+    </div>
   </div>
 
-  <div class="jjn_result" id="jjnResult">
-    <div class="jjn_dish" id="jjnDish">？？</div>
-    <div class="jjn_why" id="jjnWhy">摇动手机，签筒会替你做决定</div>
-  </div>
+  <footer class="jjn_foot">
+    <button class="jjn_btn" id="jjnBtn">开启摇一摇</button>
+    <button class="jjn_btn jjn_hide" id="jjnBtnFall">点我抽一次</button>
+    <p class="jjn_warn" id="jjnWarn">当前设备不支持，请用手机打开</p>
 
-  <button class="jjn_btn" id="jjnBtn">开启摇一摇</button>
-  <button class="jjn_btn jjn_hide" id="jjnBtnFall">点我抽一次</button>
-  <p class="jjn_warn" id="jjnWarn">当前设备不支持，请用手机打开</p>
-
-  <div class="jjn_note">
-    <b>为什么必须做降级：</b>
-    devicemotion 依赖加速度传感器，电脑浏览器、部分平板与模拟器上根本没有数据；
-    iOS 13+ 还要求用户主动点击授权，拒绝授权后同样拿不到读数。
-    如果不做“无传感器 → 提示 + 手动抽签按钮”的降级分支，
-    这些设备上页面就是一片死寂甚至控制台报错（评分维度“降级与排错”占 15 分）。
-    <br><b>accelerationIncludingGravity 与 acceleration 的区别：</b>
-    前者包含重力分量（静止时约 9.8 m/s²），不需要陀螺仪就能用；
-    后者是去掉了重力的纯线性加速度，静止时约为 0，部分安卓设备不提供。
-    所以摇一摇用前者合成幅值判断更稳。
-  </div>
+    <div class="jjn_note">
+      <b>为什么必须做降级：</b>devicemotion 依赖加速度传感器，电脑浏览器/模拟器没有数据；
+      iOS 13+ 还要求用户点击授权，拒绝后同样拿不到读数。没有降级分支，这些设备上页面就会一片死寂甚至控制台报错。
+      <b>accelerationIncludingGravity 与 acceleration 的区别：</b>前者含重力分量（静止约 9.8 m/s²，无需陀螺仪），后者是去掉重力的纯线性加速度（静止约 0，部分安卓不提供）——摇一摇用前者更稳。
+    </div>
+  </footer>
 
 <script>
-/* 任务四：摇一摇抽菜谱 —— devicemotion + accelerationIncludingGravity，阈值 18，冷却 1.5s，含降级 */
+/* 任务四：摇一摇抽菜谱（手机版全屏）—— devicemotion + accelerationIncludingGravity，阈值 18，冷却 1.5s，含降级 */
   var jjn_btn     = document.getElementById('jjnBtn');      // 开启按钮（iOS 需点击授权）
   var jjn_btnFall = document.getElementById('jjnBtnFall');  // 降级按钮
   var jjn_warn    = document.getElementById('jjnWarn');
@@ -223,9 +252,9 @@
   // 主要功能：随机抽一道菜并弹出显示，同时播放签筒晃动动画
   function jjn_draw() {
     var jjn_pick = jjn_menu[Math.floor(Math.random() * jjn_menu.length)];
-    var jjn_arr  = jjn_pick.split(' · ');
-    jjn_dish.textContent = jjn_arr[0];
-    jjn_why.textContent  = '今日就它：' + jjn_arr[1];
+    var jjn_arr  = jjn_pick.split('·');                 // 按“·”分割，trim 去空格，避免分隔符匹配不稳
+    jjn_dish.textContent = jjn_arr[0].trim();
+    jjn_why.textContent  = '今日就它：' + jjn_arr[1].trim();
 
     jjn_result.classList.remove('jjn_pop');  // 先移除再强制回流，保证动画可重复播放
     void jjn_result.offsetWidth;
@@ -235,7 +264,7 @@
     jjn_pot.classList.add('jjn_shaking');
   }
 
-  // 主要功能：devicemotion 回调 —— 取 accelerationIncludingGravity 算合成幅值，超过阈值且过了冷却才触发
+  // 主要功能：devicemotion 回调 —— 取 accelerationIncludingGravity 算合成幅值，超阈值且过了冷却才触发
   function jjn_onMotion(e) {
     var jjn_g = e.accelerationIncludingGravity;
     if (!jjn_g || jjn_g.x === null) { return; }        // 没有数据：等降级检测接管
@@ -248,7 +277,7 @@
     }
   }
 
-  // 主要功能：开始监听（作为 iOS 授权成功 / 普通设备直接启动的统一入口），并启动 2s 无数据降级检测
+  // 主要功能：开始监听（iOS 授权成功 / 普通设备直接启动的统一入口），并启动 2s 无数据降级检测
   function jjn_start() {
     if (jjn_started) { return; }
     jjn_started = true;

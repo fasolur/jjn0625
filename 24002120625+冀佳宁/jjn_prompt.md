@@ -193,3 +193,14 @@ D:\高级网页设计\beomgyu.313\24002120625+冀佳宁\swiper-task.html 根据�
 任务三 图片查看器双指缩放 mobile-zoom.html、任务四 摇一摇抽菜谱 mobile-sensor.html，
 按课堂要求监听 touchstart/touchmove/touchend，命名前缀按本仓库规则使用 jjn_）
 ```
+
+---
+
+**时间**: 2026-11-20
+**模型**: GLM-5.3-FlashX
+**提示词**:
+```
+这个作业应该是手机版的 重新做
+（三个页面按手机版全屏 App 布局重做：100dvh 视口、viewport-fit=cover、安全区适配、
+大号触控目标、无桌面居中窄栏）
+```
