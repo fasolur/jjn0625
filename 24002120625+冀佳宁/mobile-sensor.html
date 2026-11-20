@@ -4,7 +4,7 @@
   学号：24002120625
   建立时间：2026-11-20
   使用大模型：GLM-5.3-FlashX
-  功能名称：任务四 · 摇一摇彩蛋 —— devicemotion 摇动手机抽今日菜谱（手机版全屏布局，含 iOS 权限与降级）
+  功能名称：任务四 · 摇一摇彩蛋 + 倾斜视差 —— devicemotion 摇一摇抽菜谱，deviceorientation 左右倾斜驱动页面元素视差位移（含 iOS 权限申请与降级）
 -->
 <html lang="zh-CN">
 <head>
@@ -30,6 +30,13 @@
       radial-gradient(120% 60% at 50% -10%, #3a2417 0%, rgba(58, 36, 23, 0) 60%),
       #14100b;
   }
+
+  /* 视差层：倾斜手机时按各自深度横移，transition 让位移更顺滑 */
+  .jjn_layer {
+    transition: transform .18s ease-out;
+    will-change: transform;
+  }
+  #jjnLayerResult { width: 100%; display: flex; justify-content: center; }
 
   /* 顶栏 */
   .jjn_head {
@@ -196,19 +203,23 @@
 <body>
 
   <header class="jjn_head">
-    <h1>摇签问膳</h1>
-    <p>摇一摇手机 · 抽今日菜谱<br>（传感器必须真机测试，电脑收不到数据）</p>
+    <h1 class="jjn_layer" id="jjnLayerTitle">摇签问膳</h1>
+    <p>摇一摇抽菜谱 · 倾斜手机看视差<br>（传感器必须真机测试，电脑收不到数据）</p>
   </header>
 
   <div class="jjn_main">
-    <div class="jjn_pot" id="jjnPot">
-      <div class="jjn_sticks"><i></i><i></i><i></i><i></i><i></i></div>
-      <div class="jjn_body"><span>今日菜谱</span></div>
+    <div class="jjn_layer" id="jjnLayerPot">
+      <div class="jjn_pot" id="jjnPot">
+        <div class="jjn_sticks"><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="jjn_body"><span>今日菜谱</span></div>
+      </div>
     </div>
 
-    <div class="jjn_result" id="jjnResult">
-      <div class="jjn_dish" id="jjnDish">？？</div>
-      <div class="jjn_why" id="jjnWhy">摇动手机，签筒会替你做决定</div>
+    <div class="jjn_layer" id="jjnLayerResult">
+      <div class="jjn_result" id="jjnResult">
+        <div class="jjn_dish" id="jjnDish">？？</div>
+        <div class="jjn_why" id="jjnWhy">摇动手机，签筒会替你做决定</div>
+      </div>
     </div>
   </div>
 
@@ -218,14 +229,17 @@
     <p class="jjn_warn" id="jjnWarn">当前设备不支持，请用手机打开</p>
 
     <div class="jjn_note">
-      <b>为什么必须做降级：</b>devicemotion 依赖加速度传感器，电脑浏览器/模拟器没有数据；
-      iOS 13+ 还要求用户点击授权，拒绝后同样拿不到读数。没有降级分支，这些设备上页面就会一片死寂甚至控制台报错。
+      <b>为什么必须做降级：</b>devicemotion / deviceorientation 都依赖传感器，电脑浏览器/模拟器没有数据；
+      iOS 13+ 还要求用户点击授权，拒绝后同样拿不到读数。没有降级分支，这些设备上页面就会一片死寂甚至控制台报错——
+      所以摇一摇有"手动抽签"兜底，倾斜视差不支持时静默跳过、不影响其他功能。
       <b>accelerationIncludingGravity 与 acceleration 的区别：</b>前者含重力分量（静止约 9.8 m/s²，无需陀螺仪），后者是去掉重力的纯线性加速度（静止约 0，部分安卓不提供）——摇一摇用前者更稳。
     </div>
   </footer>
 
 <script>
-/* 任务四：摇一摇抽菜谱（手机版全屏）—— devicemotion + accelerationIncludingGravity，阈值 18，冷却 1.5s，含降级 */
+/* 任务四：摇一摇抽菜谱 + 倾斜视差（B 方案一并实现）
+   —— devicemotion 摇一摇：accelerationIncludingGravity，阈值 18，冷却 1.5s，含降级
+   —— deviceorientation 倾斜视差：γ 角（左右倾斜）驱动标题/签筒/结果卡三层横移 */
   var jjn_btn     = document.getElementById('jjnBtn');      // 开启按钮（iOS 需点击授权）
   var jjn_btnFall = document.getElementById('jjnBtnFall');  // 降级按钮
   var jjn_warn    = document.getElementById('jjnWarn');
@@ -233,6 +247,13 @@
   var jjn_result  = document.getElementById('jjnResult');
   var jjn_dish    = document.getElementById('jjnDish');
   var jjn_why     = document.getElementById('jjnWhy');
+
+  /* 倾斜视差层：depth 是倾斜到 ±30° 时的最大位移（px），正负交错形成远近层次 */
+  var jjn_layers  = [
+    { jjn_el: document.getElementById('jjnLayerTitle'),  jjn_depth: -14 },  // 标题反向，制造远层
+    { jjn_el: document.getElementById('jjnLayerPot'),    jjn_depth:  24 },  // 签筒位移最大，近层
+    { jjn_el: document.getElementById('jjnLayerResult'), jjn_depth:  -8 }   // 结果卡小幅反向
+  ];
 
   var jjn_menu    = [                        // 菜谱池
     '番茄牛腩 · 慢炖两小时，汤汁拌饭一绝',
@@ -293,8 +314,36 @@
     jjn_why.textContent = '用力摇一摇手机试试';
   }
 
-  // 主要功能：开启按钮 —— iOS 13+ 必须由用户点击后申请权限，其他设备直接开始监听
+  // 主要功能：deviceorientation 回调 —— 取左右倾斜角 γ，映射到 -1~1，再按各层深度横移形成视差
+  function jjn_onOrient(e) {
+    if (e.gamma === null || e.gamma === undefined) { return; }  // 没有数据：静默跳过，不报错
+    var jjn_g = Math.max(-1, Math.min(1, e.gamma / 30));        // 倾斜 ±30° 内线性映射并夹紧
+    for (var i = 0; i < jjn_layers.length; i++) {
+      jjn_layers[i].jjn_el.style.transform =
+        'translateX(' + (jjn_g * jjn_layers[i].jjn_depth).toFixed(1) + 'px)';
+    }
+  }
+
+  // 主要功能：申请陀螺仪权限并监听 deviceorientation（iOS 13+ 需用户点击后申请；其他设备直接监听；不支持则静默跳过）
+  function jjn_startOrient() {
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission()
+        .then(function (jjn_state) {
+          if (jjn_state === 'granted') {
+            window.addEventListener('deviceorientation', jjn_onOrient);
+          }
+        })
+        .catch(function () { /* 拒绝授权：视差静默降级，不影响摇一摇 */ });
+    } else if (typeof DeviceOrientationEvent !== 'undefined') {
+      window.addEventListener('deviceorientation', jjn_onOrient);
+    }
+    // 完全不支持 deviceorientation 的环境：什么都不做，页面功能不受影响
+  }
+
+  // 主要功能：开启按钮 —— iOS 13+ 必须由用户点击后申请权限（陀螺仪 + 加速度一并申请），其他设备直接开始监听
   jjn_btn.addEventListener('click', function () {
+    jjn_startOrient();                               // 视差与摇一摇共用这次点击授权
     if (typeof DeviceMotionEvent !== 'undefined' &&
         typeof DeviceMotionEvent.requestPermission === 'function') {
       DeviceMotionEvent.requestPermission()
