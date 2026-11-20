@@ -341,6 +341,15 @@
     // 完全不支持 deviceorientation 的环境：什么都不做，页面功能不受影响
   }
 
+  // 主要功能：页面任意首次触摸/点击时自动开启倾斜视差（不必先点“开启摇一摇”；iOS 借这次用户手势申请权限）
+  function jjn_autoOrient() {
+    jjn_startOrient();
+    document.removeEventListener('touchend', jjn_autoOrient);   // 只需触发一次
+    document.removeEventListener('click', jjn_autoOrient);
+  }
+  document.addEventListener('touchend', jjn_autoOrient);
+  document.addEventListener('click', jjn_autoOrient);
+
   // 主要功能：开启按钮 —— iOS 13+ 必须由用户点击后申请权限（陀螺仪 + 加速度一并申请），其他设备直接开始监听
   jjn_btn.addEventListener('click', function () {
     jjn_startOrient();                               // 视差与摇一摇共用这次点击授权
