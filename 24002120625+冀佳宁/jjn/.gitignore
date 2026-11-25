@@ -1,0 +1,17 @@
+# 依赖
+node_modules/
+
+# 环境变量（数据库凭据）
+.env
+backend/.env
+
+# 日志与系统文件
+*.log
+.DS_Store
+Thumbs.db
+
+# 工具生成产物
+.trae-html-share-packages/
+
+# 知识库上传文件与索引（运行时生成）
+backend/uploads/

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!-- 文件: frontend/knowledge.html
+     姓名：冀佳宁 | 学号：24002120625 |
+     时间：2026-11-25 | 大模型：GLM
+     主要功能: 知识库（RAG）页面 —— 上传/管理知识库文件（doc/docx/ppt/pptx/txt/md），
+              基于知识库的多轮问答，回答可溯源（显示命中的知识库文件）。 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中华美食街 · 知识库问答</title>
+  <link rel="stylesheet" href="css/jjn_knowledge.css" />
+</head>
+<body>
+  <main class="jjn_kb_wrap">
+    <div class="jjn_kb_box">
+      <header class="jjn_kb_header">
+        <div class="jjn_kb_avatar">📚</div>
+        <div>
+          <h1>知识库问答（RAG）</h1>
+          <p>上传文档 → 自动解析分块 → 检索后回答，答案有出处</p>
+        </div>
+        <a class="jjn_kb_back" href="service.html">普通客服 →</a>
+      </header>
+
+      <!-- 上传区 -->
+      <section class="jjn_kb_upload">
+        <input type="file" id="jjn_file_inp" accept=".doc,.docx,.ppt,.pptx,.txt,.md" hidden />
+        <button id="jjn_upload_btn" class="jjn_btn">📎 选择并上传知识库文件</button>
+        <span class="jjn_upload_tip">支持 doc / docx / ppt / pptx / txt / md，≤10MB</span>
+        <span id="jjn_upload_status"></span>
+      </section>
+
+      <!-- 文件列表 -->
+      <section class="jjn_kb_files">
+        <h2>知识库文件（<span id="jjn_file_count">0</span>）</h2>
+        <table>
+          <thead>
+            <tr><th>文件名</th><th>大小</th><th>分块</th><th>上传时间</th><th>操作</th></tr>
+          </thead>
+          <tbody id="jjn_file_tbody"></tbody>
+        </table>
+      </section>
+
+      <!-- 问答区 -->
+      <section class="jjn_kb_qa">
+        <h2>基于知识库的问答</h2>
+        <div class="jjn_qa_msgs" id="jjn_qa_msgs"></div>
+        <div class="jjn_qa_quick">
+          <button data-jjn-q="会员卡有什么优惠？">会员优惠</button>
+          <button data-jjn-q="门店在哪里？怎么停车？">位置停车</button>
+          <button data-jjn-q="秋季新品有什么？">秋季新品</button>
+          <button data-jjn-q="包间怎么预订？">包间预订</button>
+        </div>
+        <div class="jjn_qa_input_row">
+          <input id="jjn_qa_inp" type="text" placeholder="问点知识库里有的东西…" autocomplete="off" />
+          <button id="jjn_qa_send_btn">发送</button>
+        </div>
+      </section>
+
+      <footer class="jjn_kb_footer">24002120625 冀佳宁 · RAG：检索 Top3 片段拼入提示词 · 控制台输出发送/接收数据</footer>
+    </div>
+  </main>
+
+  <script src="js/jjn_knowledge.js"></script>
+</body>
+</html>

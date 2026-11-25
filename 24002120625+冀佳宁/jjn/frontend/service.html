@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!-- 文件: frontend/service.html
+     姓名：冀佳宁 | 学号：24002120625 |
+     时间：2026-11-25 | 大模型：GLM
+     主要功能: "中华美食街"在线客服页 —— 多轮对话、正在思考提示、
+              硅基流动/七牛下拉热切换。前端不含任何 API Key。 -->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中华美食街 · 在线客服</title>
+  <link rel="stylesheet" href="css/jjn_service.css" />
+</head>
+<body>
+  <main class="jjn_chat_wrap">
+    <div class="jjn_chat_box">
+      <header class="jjn_chat_header">
+        <div class="jjn_chat_avatar">🥟</div>
+        <div class="jjn_chat_title">
+          <h1>中华美食街 · 在线客服</h1>
+          <p id="jjn_status">服务中 · 硅基流动</p>
+        </div>
+        <!-- 任务三：平台热切换下拉框 -->
+        <select id="jjn_provider_sel" class="jjn_provider_sel" title="切换大模型平台">
+          <option value="siliconflow">硅基流动</option>
+          <option value="qiniu">七牛</option>
+        </select>
+      </header>
+
+      <!-- 消息区 -->
+      <div class="jjn_msgs" id="jjn_msgs"></div>
+
+      <!-- 快捷问题按钮（覆盖三类该答 + 一类该拒） -->
+      <div class="jjn_quick">
+        <button data-jjn-q="你们几点营业？">营业时间</button>
+        <button data-jjn-q="有什么招牌菜？">招牌菜</button>
+        <button data-jjn-q="能配送到我这里吗？我住在门店附近3公里">配送范围</button>
+        <button data-jjn-q="帮我写一首关于秋天的诗">写诗（开放域）</button>
+        <button data-jjn-q="讲个冷笑话">讲个笑话</button>
+      </div>
+
+      <!-- 输入区 -->
+      <div class="jjn_input_row">
+        <input id="jjn_inp" type="text" placeholder="输入您的问题…" autocomplete="off" />
+        <button id="jjn_send_btn">发送</button>
+      </div>
+      <footer class="jjn_chat_footer">
+        24002120625 冀佳宁 · 后端 /api/chat/send 转发 · Key 只在后端 .env
+      </footer>
+    </div>
+  </main>
+
+  <script src="js/jjn_service.js"></script>
+</body>
+</html>

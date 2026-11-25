@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--
+  姓名：冀佳宁 | 学号：24002120625 |
+  时间：2026-11-20 | 大模型：GLM
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>图文列表 · 冀佳宁 24002120625</title>
+  <link rel="stylesheet" href="css/jjn_gallery.css" />
+</head>
+<body>
+  <main class="jjn_page">
+    <header class="jjn_head">
+      <p class="jjn_eyebrow">PICTURE FEED</p>
+      <h1 class="jjn_title">图文列表</h1>
+      <p class="jjn_desc">
+        图片与文字均来自 MySQL 数据库表 <code class="jjn_code">jjn_gallery</code>，由后端接口返回后渲染到页面。
+      </p>
+
+      <!-- 接口信息条 -->
+      <div class="jjn_info_bar">
+        <span class="jjn_info_item">
+          接口地址
+          <a class="jjn_api_link" href="/api/gallery/list" target="_blank">GET /api/gallery/list</a>
+        </span>
+        <span class="jjn_info_item">
+          数据表
+          <code class="jjn_code">jjn_gallery</code>
+        </span>
+        <span class="jjn_info_item">
+          数据量
+          <span class="jjn_total" id="jjn_total">加载中...</span>
+        </span>
+      </div>
+    </header>
+
+    <!-- 图文列表 -->
+    <ul class="jjn_gallery_list" id="jjn_gallery_list"></ul>
+
+    <!-- 加载中 / 错误提示 -->
+    <p class="jjn_tip" id="jjn_tip">数据加载中...</p>
+  </main>
+
+  <script src="js/jjn_gallery.js"></script>
+</body>
+</html>

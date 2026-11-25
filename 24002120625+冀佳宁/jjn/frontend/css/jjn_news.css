@@ -1,0 +1,169 @@
+/*
+  姓名：冀佳宁 | 学号：24002120625 |
+  时间：2026-11-20 | 大模型：GLM
+*/
+
+:root {
+  --jjn_bg_dark: #0b1026;
+  --jjn_accent: #7dd3fc;
+  --jjn_accent_2: #a78bfa;
+  --jjn_text: #e8ecf8;
+  --jjn_text_dim: #9aa3c0;
+  --jjn_card: rgba(255, 255, 255, 0.06);
+  --jjn_border: rgba(255, 255, 255, 0.14);
+  --jjn_ok: #34d399;
+  --jjn_fail: #f87171;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  background: radial-gradient(1100px 650px at 80% -10%, #1b2350 0%, var(--jjn_bg_dark) 55%);
+  color: var(--jjn_text);
+}
+
+.jjn_page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 56px 24px 48px;
+}
+
+.jjn_head {
+  margin-bottom: 30px;
+}
+
+.jjn_back {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--jjn_text_dim);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.jjn_back:hover {
+  color: var(--jjn_accent);
+}
+
+.jjn_title {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  background: linear-gradient(120deg, var(--jjn_accent) 0%, var(--jjn_accent_2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 10px;
+}
+
+.jjn_desc {
+  font-size: 13px;
+  color: var(--jjn_text_dim);
+  line-height: 1.8;
+}
+
+.jjn_api {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--jjn_text_dim);
+}
+
+.jjn_api_link {
+  color: var(--jjn_accent);
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(125, 211, 252, 0.5);
+  padding-bottom: 2px;
+  font-family: Consolas, monospace;
+}
+
+.jjn_api_link:hover {
+  color: var(--jjn_accent_2);
+}
+
+.jjn_total {
+  font-size: 13px;
+  color: var(--jjn_text_dim);
+  margin-bottom: 16px;
+}
+
+.jjn_news_list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.jjn_news_item {
+  border: 1px solid var(--jjn_border);
+  border-radius: 14px;
+  background: var(--jjn_card);
+  backdrop-filter: blur(6px);
+  padding: 18px 22px;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.jjn_news_item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(125, 211, 252, 0.45);
+}
+
+.jjn_news_top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.jjn_news_title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.5;
+  flex: 1;
+  min-width: 240px;
+}
+
+.jjn_news_tag {
+  flex-shrink: 0;
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  color: var(--jjn_accent);
+  font-size: 12px;
+}
+
+.jjn_news_summary {
+  font-size: 13px;
+  color: var(--jjn_text_dim);
+  line-height: 1.8;
+  margin-bottom: 12px;
+}
+
+.jjn_news_meta {
+  display: flex;
+  gap: 18px;
+  font-size: 12px;
+  color: var(--jjn_text_dim);
+}
+
+/* 加载与错误提示 */
+.jjn_tip {
+  text-align: center;
+  font-size: 14px;
+  color: var(--jjn_text_dim);
+  padding: 32px 0;
+}
+
+.jjn_tip_ok {
+  color: var(--jjn_ok);
+}
+
+.jjn_tip_fail {
+  color: var(--jjn_fail);
+}

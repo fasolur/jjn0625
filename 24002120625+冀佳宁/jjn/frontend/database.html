@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+  姓名：冀佳宁 | 学号：24002120625 |
+  时间：2026-11-20 | 大模型：GLM
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>数据库连接 · 冀佳宁 24002120625</title>
+  <link rel="stylesheet" href="css/jjn_database.css" />
+</head>
+<body>
+  <main class="jjn_page">
+    <header class="jjn_head">
+      <a class="jjn_back" href="index.html">← 返回首页</a>
+      <h1 class="jjn_title">数据库连接</h1>
+      <p class="jjn_desc">输入 MySQL 用户名和密码，测试与数据库的连接（默认 root / Root）</p>
+    </header>
+
+    <section class="jjn_card">
+      <form id="jjn_connect_form" class="jjn_form">
+        <div class="jjn_field">
+          <label class="jjn_label" for="jjn_user">用户名</label>
+          <input class="jjn_input" type="text" id="jjn_user" name="jjn_user"
+                 value="root" placeholder="请输入用户名" autocomplete="off" />
+        </div>
+        <div class="jjn_field">
+          <label class="jjn_label" for="jjn_password">密码</label>
+          <input class="jjn_input" type="password" id="jjn_password" name="jjn_password"
+                 value="Root" placeholder="请输入密码" />
+        </div>
+        <div class="jjn_field">
+          <label class="jjn_label" for="jjn_host">主机</label>
+          <input class="jjn_input" type="text" id="jjn_host" name="jjn_host"
+                 value="localhost" placeholder="默认 localhost" autocomplete="off" />
+        </div>
+        <button class="jjn_btn" type="submit" id="jjn_submit_btn">连 接</button>
+      </form>
+
+      <!-- 连接结果提示 -->
+      <div class="jjn_result" id="jjn_result" hidden>
+        <p class="jjn_result_msg" id="jjn_result_msg"></p>
+        <p class="jjn_result_detail" id="jjn_result_detail"></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/jjn_database.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+/*
+  姓名：冀佳宁 | 学号：24002120625 |
+  时间：2026-11-20 | 大模型：GLM
+*/
+
+:root {
+  --jjn_bg_dark: #0b1026;
+  --jjn_accent: #7dd3fc;
+  --jjn_accent_2: #a78bfa;
+  --jjn_text: #e8ecf8;
+  --jjn_text_dim: #9aa3c0;
+  --jjn_card: rgba(255, 255, 255, 0.06);
+  --jjn_border: rgba(255, 255, 255, 0.14);
+  --jjn_ok: #34d399;
+  --jjn_fail: #f87171;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "PingFang SC", "Microsoft YaHei", "Segoe UI", sans-serif;
+  background: radial-gradient(1100px 650px at 20% -10%, #1b2350 0%, var(--jjn_bg_dark) 55%);
+  color: var(--jjn_text);
+}
+
+.jjn_page {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 56px 24px 48px;
+}
+
+.jjn_head {
+  margin-bottom: 28px;
+}
+
+.jjn_back {
+  display: inline-block;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--jjn_text_dim);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.jjn_back:hover {
+  color: var(--jjn_accent);
+}
+
+.jjn_title {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  background: linear-gradient(120deg, var(--jjn_accent) 0%, var(--jjn_accent_2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 10px;
+}
+
+.jjn_desc {
+  font-size: 13px;
+  color: var(--jjn_text_dim);
+  line-height: 1.8;
+}
+
+.jjn_card {
+  border: 1px solid var(--jjn_border);
+  border-radius: 16px;
+  background: var(--jjn_card);
+  backdrop-filter: blur(6px);
+  padding: 28px 26px;
+}
+
+.jjn_form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.jjn_field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.jjn_label {
+  font-size: 13px;
+  color: var(--jjn_text_dim);
+}
+
+.jjn_input {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 10px;
+  border: 1px solid var(--jjn_border);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--jjn_text);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.jjn_input:focus {
+  border-color: rgba(125, 211, 252, 0.55);
+}
+
+.jjn_btn {
+  margin-top: 6px;
+  height: 44px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 6px;
+  color: #0b1026;
+  background: linear-gradient(120deg, var(--jjn_accent) 0%, var(--jjn_accent_2) 100%);
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.jjn_btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.jjn_btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 连接结果 */
+.jjn_result {
+  margin-top: 22px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--jjn_border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.jjn_result_ok {
+  border-color: rgba(52, 211, 153, 0.45);
+}
+
+.jjn_result_fail {
+  border-color: rgba(248, 113, 113, 0.45);
+}
+
+.jjn_result_msg {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.jjn_result_ok .jjn_result_msg {
+  color: var(--jjn_ok);
+}
+
+.jjn_result_fail .jjn_result_msg {
+  color: var(--jjn_fail);
+}
+
+.jjn_result_detail {
+  font-size: 13px;
+  color: var(--jjn_text_dim);
+  line-height: 1.7;
+  word-break: break-all;
+}

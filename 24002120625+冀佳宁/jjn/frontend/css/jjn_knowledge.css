@@ -1,0 +1,176 @@
+/**
+ * 文件: frontend/css/jjn_knowledge.css
+ * 姓名：冀佳宁 | 学号：24002120625 |
+ * 时间：2026-11-25 | 大模型：GLM
+ * 主要功能: 知识库（RAG）页面样式 —— 沿用美食街暖色主题
+ */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.jjn_kb_wrap {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #2b1d14, #4a2f1d);
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  font-family: "Microsoft YaHei", sans-serif;
+}
+
+.jjn_kb_box {
+  width: 720px;
+  max-width: 100%;
+  background: #fffaf2;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  align-self: flex-start;
+}
+
+.jjn_kb_header {
+  background: #7d5a2e;
+  color: #fff;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.jjn_kb_avatar { font-size: 28px; }
+.jjn_kb_header h1 { font-size: 17px; }
+.jjn_kb_header p  { font-size: 12px; opacity: 0.85; }
+.jjn_kb_back {
+  margin-left: auto;
+  color: #fff;
+  font-size: 12px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+/* 上传区 */
+.jjn_kb_upload {
+  padding: 14px 20px;
+  border-bottom: 1px dashed #e0c9a6;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.jjn_btn {
+  border: none;
+  border-radius: 10px;
+  background: #7d5a2e;
+  color: #fff;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.jjn_btn:disabled { background: #c4b299; cursor: not-allowed; }
+.jjn_upload_tip { font-size: 12px; color: #a08b6e; }
+#jjn_upload_status { font-size: 12px; }
+#jjn_upload_status.ok  { color: #1e7e34; }
+#jjn_upload_status.bad { color: #b03a2e; }
+
+/* 文件列表 */
+.jjn_kb_files { padding: 14px 20px 6px; }
+.jjn_kb_files h2, .jjn_kb_qa h2 {
+  font-size: 14px;
+  color: #7d5a2e;
+  margin-bottom: 8px;
+}
+.jjn_kb_files table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.jjn_kb_files th, .jjn_kb_files td {
+  border-bottom: 1px solid #f0e2cf;
+  padding: 6px 8px;
+  text-align: left;
+  word-break: break-all;
+}
+.jjn_kb_files th { color: #a08b6e; font-weight: normal; }
+.jjn_kb_files .jjn_del_btn {
+  border: 1px solid #d9a09a;
+  background: #fdf0ee;
+  color: #b03a2e;
+  border-radius: 6px;
+  padding: 2px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.jjn_kb_empty { color: #b89f84; font-size: 13px; padding: 8px; }
+
+/* 问答区 */
+.jjn_kb_qa { padding: 10px 20px 6px; display: flex; flex-direction: column; }
+.jjn_qa_msgs {
+  height: 260px;
+  overflow-y: auto;
+  background: #fdf6ea;
+  border: 1px solid #f0e2cf;
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.jjn_qa_msg {
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.jjn_qa_msg_user {
+  background: #7d5a2e;
+  color: #fff;
+  align-self: flex-end;
+  border-top-right-radius: 2px;
+}
+.jjn_qa_msg_ai {
+  background: #fff;
+  border: 1px solid #eadcc8;
+  align-self: flex-start;
+  border-top-left-radius: 2px;
+}
+.jjn_qa_msg_thinking { color: #a1887f; font-style: italic; }
+.jjn_qa_src { font-size: 11px; color: #1e7e34; margin-top: 4px; }
+
+.jjn_qa_quick { display: flex; gap: 8px; margin: 8px 0; flex-wrap: wrap; }
+.jjn_qa_quick button {
+  border: 1px solid #d7b899;
+  background: #fdf3e3;
+  color: #7b4a12;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.jjn_qa_quick button:hover { background: #f5dfc0; }
+
+.jjn_qa_input_row { display: flex; gap: 8px; }
+.jjn_qa_input_row input {
+  flex: 1;
+  border: 1px solid #d7b899;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+}
+.jjn_qa_input_row input:focus { border-color: #7d5a2e; }
+.jjn_qa_input_row button {
+  border: none;
+  border-radius: 10px;
+  background: #7d5a2e;
+  color: #fff;
+  padding: 0 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.jjn_qa_input_row button:disabled { background: #c4b299; cursor: not-allowed; }
+
+.jjn_kb_footer {
+  text-align: center;
+  font-size: 11px;
+  color: #b89f84;
+  padding: 10px 0 12px;
+}
