@@ -96,3 +96,10 @@ jjn_sel_el.addEventListener("change", () => {
   jjn_status_el.textContent =
     "服务中 · " + (jjn_sel_el.value === "qiniu" ? "七牛" : "硅基流动");
 });
+
+/** 主要功能: URL 带 jjn_demo=1 时页面加载后自动发送预设问题（供测试报告自动截图） */
+(() => {
+  if (new URLSearchParams(location.search).get("jjn_demo") === "1") {
+    setTimeout(() => jjn_send("你们有什么招牌菜？再用一句话介绍下自己"), 500);
+  }
+})();

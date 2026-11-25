@@ -146,3 +146,38 @@ jjn_audio_file.addEventListener("change", () => {
   jjn_send_asr(jjn_file, jjn_file.name);
   jjn_audio_file.value = "";
 });
+
+/* ================= 示例一键演示 & 截图演示模式 ================= */
+const jjn_img_sample = document.getElementById("jjn_img_sample");
+const jjn_audio_sample = document.getElementById("jjn_audio_sample");
+
+/** 主要功能: 拉取内置示例图片（images/jjn_demo_image.jpg）并自动走图像识别全流程 */
+async function jjn_run_sample_image() {
+  const jjn_resp = await fetch("/images/jjn_demo_image.jpg");
+  const jjn_blob = await jjn_resp.blob();
+  const jjn_file = new File([jjn_blob], "jjn_demo_image.jpg", { type: "image/jpeg" });
+  const jjn_dt = new DataTransfer();
+  jjn_dt.items.add(jjn_file);
+  jjn_img_inp.files = jjn_dt.files; // 让预览与「开始识别」复用原有事件链
+  jjn_img_inp.dispatchEvent(new Event("change"));
+  jjn_img_go.click();
+}
+jjn_img_sample.addEventListener("click", () => jjn_run_sample_image());
+
+/** 主要功能: 拉取内置示例语音（audio/jjn_demo_voice.wav，TTS 合成）并自动送 ASR 识别 */
+async function jjn_run_sample_audio() {
+  const jjn_resp = await fetch("/audio/jjn_demo_voice.wav");
+  const jjn_blob = await jjn_resp.blob();
+  const jjn_file = new File([jjn_blob], "jjn_demo_voice.wav", { type: "audio/wav" });
+  jjn_audio_player.src = URL.createObjectURL(jjn_blob);
+  jjn_audio_player.hidden = false;
+  await jjn_send_asr(jjn_file, "jjn_demo_voice.wav");
+}
+jjn_audio_sample.addEventListener("click", () => jjn_run_sample_audio());
+
+/** 主要功能: URL 带 jjn_demo=image|audio 参数时页面加载后自动执行对应演示（供测试报告自动截图） */
+(() => {
+  const jjn_demo = new URLSearchParams(location.search).get("jjn_demo");
+  if (jjn_demo === "image") jjn_run_sample_image();
+  if (jjn_demo === "audio") jjn_run_sample_audio();
+})();

@@ -154,3 +154,10 @@ document.querySelectorAll(".jjn_qa_quick button").forEach((jjn_b) =>
 
 // 页面打开先加载文件列表
 jjn_load_files();
+
+/** 主要功能: URL 带 jjn_demo=1 时页面加载后自动向知识库提问（供测试报告自动截图） */
+(() => {
+  if (new URLSearchParams(location.search).get("jjn_demo") === "1") {
+    setTimeout(() => jjn_ask("会员卡有什么优惠？"), 800);
+  }
+})();

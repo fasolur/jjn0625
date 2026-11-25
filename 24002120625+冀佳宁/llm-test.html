@@ -104,6 +104,15 @@
         }
         .jjn_env b { color: var(--jjn-pass); font-weight: normal; }
         .jjn_foot { text-align: center; color: var(--jjn-sub); font-size: 12px; margin-top: 8px; }
+        /* 实操截图 */
+        .jjn_shot { margin: 14px 0 4px; }
+        .jjn_shot img {
+            width: 100%; display: block; border-radius: 10px;
+            border: 1px solid var(--jjn-border);
+        }
+        .jjn_shot figcaption {
+            color: var(--jjn-sub); font-size: 12px; margin-top: 6px; text-align: center;
+        }
         .jjn_print_btn {
             position: fixed; right: 22px; bottom: 22px;
             background: var(--jjn-accent); color: #fff; border: none;
@@ -149,6 +158,10 @@
                 <div>MySQL 数据库 (3306)<span><b>✓</b></span></div>
                 <div>服务端口 (8625)<span><b>✓</b></span></div>
             </div>
+            <figure class="jjn_shot">
+                <img src="llm-test-images/jjn_shot_home.png" alt="服务启动与项目首页实拍">
+                <figcaption>实拍：node app.js 启动后打开 http://localhost:8625 项目首页（05/06/07 三个 LLM 功能入口）</figcaption>
+            </figure>
         </div>
 
         <!-- 1 在线客服 -->
@@ -176,6 +189,10 @@
                 <span class="jjn_label">输入：</span><code>我刚才问了什么？</code>
                 <pre>回复：能准确复述上一轮问题（前端每次携带全部历史 messages）</pre>
             </div>
+            <figure class="jjn_shot">
+                <img src="llm-test-images/jjn_shot_service.png" alt="在线客服对话实拍">
+                <figcaption>实拍：service.html 提问「招牌菜+自我介绍」，小美回复并标注模型 Qwen2.5-7B-Instruct，右上角可热切换平台</figcaption>
+            </figure>
         </div>
 
         <!-- 2 RAG 知识库 -->
@@ -209,30 +226,44 @@ jjn_秋季新品发布.pptx   19203 B  · 1 块 · 2026/11/25 13:57:04</pre>
                 <pre>docx 用 mammoth 提取正文；pptx 用 jszip 解包读取每页文本；
 支持 doc/docx/ppt/pptx/txt/md，单文件 ≤10MB，删除同步清空索引</pre>
             </div>
+            <figure class="jjn_shot">
+                <img src="llm-test-images/jjn_shot_kb.png" alt="RAG 知识库问答实拍">
+                <figcaption>实拍：knowledge.html 文件列表（2 个知识库文件）+ 提问「会员优惠」返回带出处（绿色出处行）的回答</figcaption>
+            </figure>
         </div>
 
         <!-- 3 图像识别 -->
         <div class="jjn_section">
             <h2>三 · 图像识别（ai.html 上半区）<em>视觉模型 Qwen3-VL-8B-Instruct</em></h2>
-            <p class="jjn_desc">图片上传后转 base64 交后端转发视觉模型，返回中文描述。</p>
+            <p class="jjn_desc">图片上传后转 base64 交后端转发视觉模型，返回中文描述。页面提供「示例图片一键识别」按钮（内置复兴号列车图，免找图直接演示）。</p>
             <div class="jjn_case">
-                <div class="jjn_row"><span class="jjn_label">用例 1 · 上传空间站照片</span><span class="jjn_tag">通过</span></div>
-                <pre>回复：浩瀚星海中，国际空间站如钢铁巨舰般悬浮，金色太阳能板熠熠生辉……
+                <div class="jjn_row"><span class="jjn_label">用例 1 · 内置示例图一键识别（复兴号列车）</span><span class="jjn_tag">通过</span></div>
+                <pre>回复：银色高铁快如银梭疾驰驶行于无垠稻田间，划破澄澈蓝天……远处山黛，铁轨承载着速度与方位，
+掠过这片生机盎然的田园，勾勒出诗意与现代交融的中国乡村画卷。
 模型：Qwen/Qwen3-VL-8B-Instruct（siliconflow）</pre>
             </div>
+            <figure class="jjn_shot">
+                <img src="llm-test-images/jjn_shot_img.png" alt="图像识别实拍">
+                <figcaption>实拍：ai.html「示例图片一键识别」——左侧图片预览 + 视觉模型返回的中文描述与模型标注</figcaption>
+            </figure>
         </div>
 
         <!-- 4 语音识别 -->
         <div class="jjn_section">
             <h2>四 · 语音识别（ai.html 下半区）<em>七牛 Qwen-Audio-3.0-ASR-Flash · 自动降级</em></h2>
-            <p class="jjn_desc">MediaRecorder 麦克风录音（可回放）或上传音频 → /api/ai/asr → 返回文字。</p>
+            <p class="jjn_desc">MediaRecorder 麦克风录音（可回放）、上传音频文件或点击「示例语音一键识别」（内置 TTS 合成语音）→ /api/ai/asr → 返回文字。</p>
             <div class="jjn_case">
-                <div class="jjn_row"><span class="jjn_label">用例 1 · 录音转文字</span><span class="jjn_tag jjn_yellow">通过（降级链路）</span></div>
-                <pre>主通道：七牛 Qwen-Audio-3.0-ASR-Flash（/v1/audio/transcriptions）
-实测：课程网关暂未开通该模型通道（no available channels）
+                <div class="jjn_row"><span class="jjn_label">用例 1 · 示例语音一键转文字</span><span class="jjn_tag jjn_yellow">通过（降级链路）</span></div>
+                <pre>输入语音内容：你好，欢迎来到中华美食街，请问今天想吃点什么？（Windows TTS 合成 WAV，6 秒）
+主通道：七牛 Qwen-Audio-3.0-ASR-Flash（/v1/audio/transcriptions）
+实测：课程网关暂未开通该模型通道（400: no available channels）
 降级：自动切换硅基流动 SenseVoiceSmall，成功返回转写文字，响应中标注实际服务
-前端显示当前使用的平台——降级过程对用户透明、控制台无异常抛错</pre>
+页面服务行显示：硅基流动 SenseVoice（降级：七牛平台报 400）——降级对用户透明、无异常抛错</pre>
             </div>
+            <figure class="jjn_shot">
+                <img src="llm-test-images/jjn_shot_asr.png" alt="语音识别实拍">
+                <figcaption>实拍：ai.html「示例语音一键识别」——音频可回放 + 转写文字 + 服务来源标注（含降级原因）</figcaption>
+            </figure>
         </div>
 
         <!-- 5 Key 安全与控制台日志 -->
@@ -249,6 +280,10 @@ jjn_秋季新品发布.pptx   19203 B  · 1 块 · 2026/11/25 13:57:04</pre>
 [RAG] 接收自大模型的数据：{ id, choices:[{message:{content}}], usage }
 客服 / 图像识别 / 语音识别接口均打印同格式日志（图片 base64 用占位符省略）</pre>
             </div>
+            <figure class="jjn_shot">
+                <img src="llm-test-images/jjn_shot_console.png" alt="后端控制台日志实拍">
+                <figcaption>实拍：后端控制台真实输出——「发送给大模型的数据」完整 payload（含 system 人设与写诗请求）与「接收自大模型的数据」原始 JSON</figcaption>
+            </figure>
         </div>
 
         <p class="jjn_foot">冀佳宁 · 24002120625 · 《高级网页设计》LLM 实践 · 本报告数据均来自 2026-11-25 真实接口调用</p>
